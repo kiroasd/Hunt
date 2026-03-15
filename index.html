@@ -76,7 +76,6 @@
             transform: translateY(-2px); 
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
-        button:active { transform: translateY(0); }
         #reader { 
             width: 100%; 
             border-radius: 20px; 
@@ -84,7 +83,6 @@
             margin-top: 20px; 
             border: 4px solid #673ab7; 
             background: #000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         .mission-box { 
             background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%); 
@@ -93,14 +91,13 @@
             margin: 20px 0; 
             font-size: 20px; 
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(251, 192, 45, 0.2);
             line-height: 1.6;
         }
         .progress-bar {
             width: 100%;
-            height: 20px;
+            height: 25px;
             background: #e0e0e0;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
             margin: 15px 0;
         }
@@ -113,7 +110,6 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 12px;
         }
         table { 
             width: 100%; 
@@ -121,103 +117,21 @@
             border-collapse: collapse;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        th, td { 
-            padding: 15px; 
-            border-bottom: 1px solid #eee; 
-        }
-        th { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            color: white;
-            font-weight: bold;
-        }
-        tr:nth-child(even) { background: #f5f5f5; }
-        tr:hover { background: #e8eaf6; }
+        th { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
         .hidden { display: none !important; }
-        .success-flash { 
-            animation: flash 0.8s ease-in-out; 
-        }
-        @keyframes flash { 
-            0% { background: white; }
-            25% { background: #4caf50; }
-            50% { background: #81c784; }
-            75% { background: #4caf50; }
-            100% { background: white; }
-        }
-        .camera-controls {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .camera-controls button {
-            flex: 1;
-            min-width: 140px;
-            padding: 12px;
-            font-size: 16px;
-        }
-        .btn-secondary {
-            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%) !important;
-        }
-        .btn-hint {
-            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%) !important;
-        }
-        #scan-feedback { 
-            margin-top: 15px; 
-            padding: 10px;
-            border-radius: 10px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        .winner-screen {
-            background: linear-gradient(135deg, #ffd700 0%, #ff9800 100%);
-            padding: 40px;
-            border-radius: 25px;
-            animation: winnerPulse 1s infinite alternate;
-        }
-        @keyframes winnerPulse {
-            from { transform: scale(1); box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-            to { transform: scale(1.02); box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
-        }
-        .trophy { font-size: 80px; margin: 20px 0; }
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #f0f;
-            animation: confetti-fall 3s linear forwards;
-            z-index: 9999;
-        }
-        @keyframes confetti-fall {
-            to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-        .hint-box {
-            background: #e3f2fd;
-            border-right: 4px solid #2196f3;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            display: none;
-        }
-        .status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            background: #4caf50;
-            border-radius: 50%;
-            margin-left: 5px;
-            animation: blink 1s infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
+        .success-flash { animation: flash 0.8s ease-in-out; }
+        @keyframes flash { 0%, 100% { background: white; } 50% { background: #4caf50; } }
+        .camera-controls { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-secondary { background: #ff9800 !important; }
+        .btn-hint { background: #2196f3 !important; }
+        .hint-box { background: #e3f2fd; border-right: 4px solid #2196f3; padding: 15px; margin: 10px 0; border-radius: 10px; display: none; }
+        .winner-screen { background: linear-gradient(135deg, #ffd700 0%, #ff9800 100%); padding: 40px; border-radius: 25px; }
     </style>
 </head>
 <body id="main-body">
 
-    <!-- صفحة تسجيل الدخول -->
     <div id="login-screen" class="card">
         <h1>🧭 صيد الكنز الرقمي</h1>
         <p class="subtitle">مسابقة تفاعلية للبحث عن الألغاز المخفية</p>
@@ -232,75 +146,45 @@
             <option value="البنفسجي">🟣 الفريق البنفسجي</option>
         </select>
         <button onclick="startApp()">🚀 دخول اللعبة</button>
-        <p style="font-size: 12px; color: #999; margin-top: 20px;">تأكد من تشغيل الكاميرا والموقع</p>
     </div>
 
-    <!-- شاشة اللعبة -->
     <div id="game-screen" class="card hidden">
         <div class="team-name" id="team-display"></div>
-
-        <!-- شريط التقدم -->
         <div class="progress-bar">
-            <div class="progress-fill" id="progress-bar" style="width: 10%">1/10</div>
+            <div class="progress-fill" id="progress-bar" style="width: 0%">0/10</div>
         </div>
-
         <div class="mission-box">
             <strong id="mission-title">المهمة رقم 1</strong>
             <p id="mission-text">جاري تحميل اللغز...</p>
         </div>
-
-        <!-- صندوق التلميحات -->
         <div class="hint-box" id="hint-box">
             <strong>💡 تلميح:</strong> <span id="hint-text"></span>
         </div>
-
-        <!-- الكاميرا -->
         <div id="reader"></div>
-        <p id="scan-feedback"><span class="status-indicator"></span> وجه الكاميرا بوضوح للكود</p>
-
-        <!-- أزرار التحكم -->
+        <p id="scan-feedback">وجه الكاميرا بوضوح للكود</p>
         <div class="camera-controls">
-            <button class="btn-secondary" onclick="restartScanner()">🔄 إعادة تشغيل الكاميرا</button>
-            <button class="btn-hint" onclick="showHint()">💡 طلب تلميح (-2 نقطة)</button>
+            <button class="btn-secondary" onclick="restartScanner()">🔄 إعادة الكاميرا</button>
+            <button class="btn-hint" onclick="showHint()">💡 تلميح (-2 ن)</button>
         </div>
-
-        <hr style="margin: 30px 0; border: none; border-top: 2px dashed #ddd;">
-
-        <!-- لوحة المتصدرين -->
-        <h3>🏆 ترتيب الفرق <span class="status-indicator"></span></h3>
+        <hr>
+        <h3>🏆 ترتيب الفرق</h3>
         <table>
-            <thead>
-                <tr>
-                    <th>الترتيب</th>
-                    <th>الفريق</th>
-                    <th>المهمة</th>
-                    <th>النقاط</th>
-                </tr>
-            </thead>
+            <thead><tr><th>الترتيب</th><th>الفريق</th><th>المهمة</th><th>النقاط</th></tr></thead>
             <tbody id="leaderboard-body"></tbody>
         </table>
     </div>
 
-    <!-- شاشة الفوز -->
     <div id="winner-screen" class="card hidden winner-screen">
-        <div class="trophy">🏆</div>
-        <h1 style="color: #333; font-size: 32px;">مبروك يا أبطال!</h1>
-        <h2 id="winner-team" style="color: #d32f2f;"></h2>
-        <p style="font-size: 20px; color: #333; font-weight: bold;">لقد وجدتم الكنز! 🎉</p>
-        <p style="font-size: 18px; margin-top: 20px;">النقاط النهائية: <span id="final-points" style="font-size: 28px; color: #d32f2f;">100</span></p>
-        <button onclick="location.reload()" style="margin-top: 30px; background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);">🔄 لعبة جديدة</button>
+        <div style="font-size: 80px;">🏆</div>
+        <h1>مبروك يا أبطال!</h1>
+        <h2 id="winner-team"></h2>
+        <p>النقاط النهائية: <span id="final-points" style="font-size: 28px; font-weight: bold;"></span></p>
+        <button onclick="location.reload()" style="background: #4caf50;">🔄 لعبة جديدة</button>
     </div>
 
-    <!-- صوت النجاح -->
-    <audio id="success-sound" preload="auto">
-        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="winner-sound" preload="auto">
-        <source src="https://www.soundjay.com/misc/sounds/crowd-cheering-01.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="success-sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
     <script>
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyACJ9zKs8EiVCNN8CgOtCNknV1znLNjlY8",
             authDomain: "spiritualtreasurehunt-684b9.firebaseapp.com",
@@ -313,31 +197,24 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // بيانات الألغاز
         const allMissions = [
-            { q: "🔍 اللغز 1: أنا البداية والنهاية.. ابحث عني في مكان الصلاة المرتفع", key: "Alpha_Omega", hint: "ابحث في المكان المرتفع حيث يقف الكاهن" },
-            { q: "🔔 اللغز 2: صوتي ينادي المؤمنين من أعلى المنارة.. ما هو؟", key: "Bells", hint: "استمع للصوت العالي في الكنيسة" },
-            { q: "📚 اللغز 3: مكان يجتمع فيه الأطفال لتعلم كلمة الله..", key: "SundaySchool", hint: "غرفة الأطفال الصغار" },
-            { q: "🍞 اللغز 4: خبز نأكله لنحيا به.. ابحث عن صورته في الكنيسة", key: "Manna", hint: "القربان المقدس" },
-            { q: "🚢 اللغز 5: سفينة أنقذت العالم من الغرق.. ابحث عن مجسم لها", key: "Ark", hint: "سفينة نوح" },
+            { q: "🔍 اللغز 1: أنا البداية والنهاية.. ابحث عني في مكان الصلاة المرتفع", key: "Alpha_Omega", hint: "ابحث في الهيكل أو المذبح" },
+            { q: "🔔 اللغز 2: صوتي ينادي المؤمنين من أعلى المنارة.. ما هو؟", key: "Bells", hint: "ابحث بجوار الجرس" },
+            { q: "📚 اللغز 3: مكان يجتمع فيه الأطفال لتعلم كلمة الله..", key: "SundaySchool", hint: "غرفة فصول مدارس الأحد" },
+            { q: "🍞 اللغز 4: خبز نأكله لنحيا به.. ابحث عن صورته", key: "Manna", hint: "صور القربان" },
+            { q: "🚢 اللغز 5: سفينة أنقذت العالم من الغرق..", key: "Ark", hint: "سفينة نوح" },
             { q: "🪨 اللغز 6: حجر دحرجه الملاك ليعلن القيامة..", key: "Stone", hint: "باب القبر الفارغ" },
-            { q: "🍎 اللغز 7: شجرة أكل منها آدم.. ابحث عن صورتها", key: "Apple", hint: "جنة عدن" },
+            { q: "🍎 اللغز 7: شجرة أكل منها آدم..", key: "Apple", hint: "جنة عدن" },
             { q: "💧 اللغز 8: نبع ماء ارتوى منه الشعب في البرية..", key: "Rock", hint: "صخرة موسى" },
-            { q: "👑 اللغز 9: بيت لحم.. مدينة ولد فيها الملك.. ابحث عن المزود", key: "King", hint: "مكان ميلاد يسوع" },
-            { q: "✝️ اللغز 10: الصليب.. علامة نصرتنا.. ابحث عن أكبر صليب في القاعة", key: "Victory", hint: "أعلى مكان في القاعة" }
+            { q: "👑 اللغز 9: بيت لحم.. مدينة ولد فيها الملك..", key: "King", hint: "المزود" },
+            { q: "✝️ اللغز 10: الصليب.. علامة نصرتنا..", key: "Victory", hint: "أكبر صليب بالقاعة" }
         ];
 
-        let currentTeam = "";
-        let currentMission = 1;
-        let teamMissions = [];
-        let html5QrCode;
-        let totalPoints = 0;
-        let hintsUsed = 0;
+        let currentTeam = "", currentMission = 1, teamMissions = [], html5QrCode, totalPoints = 0;
 
-        // توليد ترتيب عشوائي ثابت للفريق
-        function shuffleForTeam(teamName) {
+        function shuffleForTeam(name) {
             let shuffled = [...allMissions];
-            let seed = teamName.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+            let seed = name.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor((seed / (i + 1) + i) % (i + 1));
                 [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -345,237 +222,90 @@
             return shuffled;
         }
 
-        // بدء اللعبة
         async function startApp() {
             currentTeam = document.getElementById('team-select').value;
-            if (!currentTeam) {
-                alert("⚠️ اختر فريقك أولاً!");
-                return;
-            }
-
-            // توليد نفس الترتيب كل مرة
+            if (!currentTeam) return alert("اختر الفريق!");
             teamMissions = shuffleForTeam(currentTeam);
-
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             document.getElementById('team-display').innerText = "فريق: " + currentTeam;
-
             await loadProgress();
             loadLeaderboard();
             startScanner();
         }
 
-        // تحميل التقدم
         async function loadProgress() {
-            try {
-                const doc = await db.collection('teams').doc(currentTeam).get();
-                if (doc.exists) {
-                    currentMission = doc.data().currentMission || 1;
-                    totalPoints = doc.data().totalPoints || 0;
-                    hintsUsed = doc.data().hintsUsed || 0;
-                    // التأكد من استخدام نفس الترتيب
-                    teamMissions = shuffleForTeam(currentTeam);
-                } else {
-                    await db.collection('teams').doc(currentTeam).set({ 
-                        currentMission: 1, 
-                        totalPoints: 0,
-                        hintsUsed: 0,
-                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-                updateUI();
-            } catch (error) {
-                console.error("Error loading progress:", error);
-                alert("⚠️ خطأ في الاتصال. جاري العمل في الوضع المحلي...");
+            const doc = await db.collection('teams').doc(currentTeam).get();
+            if (doc.exists) {
+                currentMission = doc.data().currentMission || 1;
+                totalPoints = doc.data().totalPoints || 0;
+            } else {
+                await db.collection('teams').doc(currentTeam).set({ currentMission: 1, totalPoints: 0 });
             }
+            updateUI();
         }
 
-        // تحديث الواجهة
         function updateUI() {
             const progress = ((currentMission - 1) / 10) * 100;
             document.getElementById('progress-bar').style.width = progress + '%';
             document.getElementById('progress-bar').innerText = Math.min(currentMission, 10) + '/10';
-
             if (currentMission > 10) {
-                showWinnerScreen();
+                document.getElementById('game-screen').classList.add('hidden');
+                document.getElementById('winner-screen').classList.remove('hidden');
+                document.getElementById('winner-team').innerText = currentTeam;
+                document.getElementById('final-points').innerText = totalPoints;
             } else {
-                document.getElementById('mission-title').innerText = "المهمة " + currentMission + " من 10";
+                document.getElementById('mission-title').innerText = "المهمة " + currentMission;
                 document.getElementById('mission-text').innerText = teamMissions[currentMission - 1].q;
                 document.getElementById('hint-box').style.display = 'none';
             }
         }
 
-        // عرض شاشة الفوز
-        function showWinnerScreen() {
-            document.getElementById('game-screen').classList.add('hidden');
-            document.getElementById('winner-screen').classList.remove('hidden');
-            document.getElementById('winner-team').innerText = currentTeam;
-            document.getElementById('final-points').innerText = totalPoints;
-
-            // تشغيل صوت الفوز
-            const winnerSound = document.getElementById('winner-sound');
-            winnerSound.volume = 0.5;
-            winnerSound.play().catch(e => console.log('Audio play failed:', e));
-
-            // تأثير الكونفيتي
-            createConfetti();
-        }
-
-        // تأثير الكونفيتي
-        function createConfetti() {
-            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722'];
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                    document.body.appendChild(confetti);
-                    setTimeout(() => confetti.remove(), 4000);
-                }, i * 50);
-            }
-        }
-
-        // لوحة المتصدرين
         function loadLeaderboard() {
             db.collection('teams').orderBy('totalPoints', 'desc').onSnapshot(snap => {
-                let html = "";
-                let rank = 1;
+                let html = "", rank = 1;
                 snap.forEach(doc => {
-                    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
-                    html += `<tr>
-                        <td>${medal}</td>
-                        <td><strong>${doc.id}</strong></td>
-                        <td>${doc.data().currentMission > 10 ? '✅' : doc.data().currentMission}/10</td>
-                        <td style="color: #4caf50; font-weight: bold;">${doc.data().totalPoints || 0}</td>
-                    </tr>`;
-                    rank++;
+                    html += `<tr><td>${rank++}</td><td>${doc.id}</td><td>${doc.data().currentMission}/10</td><td>${doc.data().totalPoints}</td></tr>`;
                 });
                 document.getElementById('leaderboard-body').innerHTML = html;
-            }, error => {
-                console.error("Leaderboard error:", error);
             });
         }
 
-        // تشغيل الماسح
         function startScanner() {
-            if (html5QrCode) {
-                html5QrCode.clear();
-            }
-
+            if (html5QrCode) html5QrCode.clear();
             html5QrCode = new Html5Qrcode("reader");
-
-            html5QrCode.start(
-                { facingMode: "environment" }, 
-                { fps: 25, qrbox: { width: 280, height: 280 } }, 
-                (text) => {
-                    handleScan(text);
-                },
-                (error) => {
-                    // تجاهل أخطاء المسح المستمرة
+            html5QrCode.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (text) => {
+                if (text.trim().toLowerCase().includes(teamMissions[currentMission - 1].key.toLowerCase())) {
+                    document.getElementById('main-body').classList.add('success-flash');
+                    document.getElementById('success-sound').play();
+                    html5QrCode.stop().then(() => {
+                        setTimeout(handleSuccess, 1000);
+                    });
                 }
-            ).catch(err => {
-                console.error("Scanner error:", err);
-                document.getElementById('scan-feedback').innerText = "⚠️ لا يمكن تشغيل الكاميرا. تأكد من إعطاء الإذن.";
-                document.getElementById('scan-feedback').style.color = "red";
-            });
+            }).catch(e => console.error(e));
         }
 
-        // إعادة تشغيل الماسح
-        function restartScanner() {
-            document.getElementById('scan-feedback').innerText = "🔄 جاري إعادة تشغيل الكاميرا...";
-            document.getElementById('scan-feedback').style.color = "#666";
-            startScanner();
-        }
-
-        // معالجة المسح
-        function handleScan(text) {
-            const scanned = text.trim().toLowerCase();
-            const target = teamMissions[currentMission - 1].key.toLowerCase();
-
-            if (scanned.includes(target)) {
-                // نجاح!
-                document.getElementById('main-body').classList.add('success-flash');
-                document.getElementById('scan-feedback').innerText = "✅ كود صحيح! جاري التحميل...";
-                document.getElementById('scan-feedback').style.color = "green";
-
-                // تشغيل الصوت
-                const successSound = document.getElementById('success-sound');
-                successSound.volume = 0.3;
-                successSound.play().catch(e => console.log('Audio play failed:', e));
-
-                html5QrCode.stop().then(() => {
-                    setTimeout(() => {
-                        document.getElementById('main-body').classList.remove('success-flash');
-                        handleSuccess();
-                    }, 1000);
-                });
-            } else {
-                document.getElementById('scan-feedback').innerText = "❌ كود غير صحيح لهذه المهمة!";
-                document.getElementById('scan-feedback').style.color = "red";
-                setTimeout(() => {
-                    document.getElementById('scan-feedback').innerText = "وجه الكاميرا بوضوح للكود";
-                    document.getElementById('scan-feedback').style.color = "#666";
-                }, 2000);
-            }
-        }
-
-        // معالجة النجاح
         async function handleSuccess() {
             currentMission++;
             totalPoints += 10;
-
-            try {
-                await db.collection('teams').doc(currentTeam).update({
-                    currentMission: currentMission,
-                    totalPoints: totalPoints,
-                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch (error) {
-                console.error("Update error:", error);
-            }
-
+            await db.collection('teams').doc(currentTeam).update({ currentMission, totalPoints });
+            document.getElementById('main-body').classList.remove('success-flash');
             updateUI();
+            if (currentMission <= 10) startScanner();
+        }
 
-            if (currentMission <= 10) {
-                setTimeout(() => {
-                    alert("🎉 صح يا بطل! +10 نقاط\n\nالمهمة اللي جاية جاهزين؟");
-                    startScanner();
-                }, 300);
+        function showHint() {
+            if (totalPoints >= 2) {
+                totalPoints -= 2;
+                db.collection('teams').doc(currentTeam).update({ totalPoints });
+                document.getElementById('hint-text').innerText = teamMissions[currentMission - 1].hint;
+                document.getElementById('hint-box').style.display = 'block';
+            } else {
+                alert("تحتاج لنقطتين على الأقل!");
             }
         }
 
-        // عرض التلميح
-        async function showHint() {
-            if (currentMission > 10) return;
-
-            const currentHint = teamMissions[currentMission - 1].hint;
-            document.getElementById('hint-text').innerText = currentHint;
-            document.getElementById('hint-box').style.display = 'block';
-
-            // خصم نقطتين
-            hintsUsed++;
-            totalPoints = Math.max(0, totalPoints - 2);
-
-            try {
-                await db.collection('teams').doc(currentTeam).update({
-                    totalPoints: totalPoints,
-                    hintsUsed: hintsUsed
-                });
-            } catch (error) {
-                console.error("Hint update error:", error);
-            }
-
-            alert("💡 تم إظهار التلميح!\nتم خصم نقطتين من رصيدك.");
-        }
-
-        // منع الخروج بالغلط
-        window.onbeforeunload = function() {
-            if (currentTeam && currentMission <= 10) {
-                return "هل تريد حقاً مغادرة اللعبة؟";
-            }
-        };
+        function restartScanner() { startScanner(); }
     </script>
 </body>
 </html>
