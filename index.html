@@ -1,5 +1,4 @@
-
-html_code = '''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -239,34 +238,34 @@ html_code = '''<!DOCTYPE html>
     <!-- شاشة اللعبة -->
     <div id="game-screen" class="card hidden">
         <div class="team-name" id="team-display"></div>
-        
+
         <!-- شريط التقدم -->
         <div class="progress-bar">
             <div class="progress-fill" id="progress-bar" style="width: 10%">1/10</div>
         </div>
-        
+
         <div class="mission-box">
             <strong id="mission-title">المهمة رقم 1</strong>
             <p id="mission-text">جاري تحميل اللغز...</p>
         </div>
-        
+
         <!-- صندوق التلميحات -->
         <div class="hint-box" id="hint-box">
             <strong>💡 تلميح:</strong> <span id="hint-text"></span>
         </div>
-        
+
         <!-- الكاميرا -->
         <div id="reader"></div>
         <p id="scan-feedback"><span class="status-indicator"></span> وجه الكاميرا بوضوح للكود</p>
-        
+
         <!-- أزرار التحكم -->
         <div class="camera-controls">
             <button class="btn-secondary" onclick="restartScanner()">🔄 إعادة تشغيل الكاميرا</button>
             <button class="btn-hint" onclick="showHint()">💡 طلب تلميح (-2 نقطة)</button>
         </div>
-        
+
         <hr style="margin: 30px 0; border: none; border-top: 2px dashed #ddd;">
-        
+
         <!-- لوحة المتصدرين -->
         <h3>🏆 ترتيب الفرق <span class="status-indicator"></span></h3>
         <table>
@@ -310,7 +309,7 @@ html_code = '''<!DOCTYPE html>
             messagingSenderId: "266754020181",
             appId: "1:266754020181:web:67750b2f5a670a601195dc"
         };
-        
+
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -353,14 +352,14 @@ html_code = '''<!DOCTYPE html>
                 alert("⚠️ اختر فريقك أولاً!");
                 return;
             }
-            
+
             // توليد نفس الترتيب كل مرة
             teamMissions = shuffleForTeam(currentTeam);
-            
+
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             document.getElementById('team-display').innerText = "فريق: " + currentTeam;
-            
+
             await loadProgress();
             loadLeaderboard();
             startScanner();
@@ -396,7 +395,7 @@ html_code = '''<!DOCTYPE html>
             const progress = ((currentMission - 1) / 10) * 100;
             document.getElementById('progress-bar').style.width = progress + '%';
             document.getElementById('progress-bar').innerText = Math.min(currentMission, 10) + '/10';
-            
+
             if (currentMission > 10) {
                 showWinnerScreen();
             } else {
@@ -412,12 +411,12 @@ html_code = '''<!DOCTYPE html>
             document.getElementById('winner-screen').classList.remove('hidden');
             document.getElementById('winner-team').innerText = currentTeam;
             document.getElementById('final-points').innerText = totalPoints;
-            
+
             // تشغيل صوت الفوز
             const winnerSound = document.getElementById('winner-sound');
             winnerSound.volume = 0.5;
             winnerSound.play().catch(e => console.log('Audio play failed:', e));
-            
+
             // تأثير الكونفيتي
             createConfetti();
         }
@@ -464,9 +463,9 @@ html_code = '''<!DOCTYPE html>
             if (html5QrCode) {
                 html5QrCode.clear();
             }
-            
+
             html5QrCode = new Html5Qrcode("reader");
-            
+
             html5QrCode.start(
                 { facingMode: "environment" }, 
                 { fps: 25, qrbox: { width: 280, height: 280 } }, 
@@ -500,12 +499,12 @@ html_code = '''<!DOCTYPE html>
                 document.getElementById('main-body').classList.add('success-flash');
                 document.getElementById('scan-feedback').innerText = "✅ كود صحيح! جاري التحميل...";
                 document.getElementById('scan-feedback').style.color = "green";
-                
+
                 // تشغيل الصوت
                 const successSound = document.getElementById('success-sound');
                 successSound.volume = 0.3;
                 successSound.play().catch(e => console.log('Audio play failed:', e));
-                
+
                 html5QrCode.stop().then(() => {
                     setTimeout(() => {
                         document.getElementById('main-body').classList.remove('success-flash');
@@ -526,7 +525,7 @@ html_code = '''<!DOCTYPE html>
         async function handleSuccess() {
             currentMission++;
             totalPoints += 10;
-            
+
             try {
                 await db.collection('teams').doc(currentTeam).update({
                     currentMission: currentMission,
@@ -536,12 +535,12 @@ html_code = '''<!DOCTYPE html>
             } catch (error) {
                 console.error("Update error:", error);
             }
-            
+
             updateUI();
-            
+
             if (currentMission <= 10) {
                 setTimeout(() => {
-                    alert("🎉 صح يا بطل! +10 نقاط\\n\\nالمهمة اللي جاية جاهزين؟");
+                    alert("🎉 صح يا بطل! +10 نقاط\n\nالمهمة اللي جاية جاهزين؟");
                     startScanner();
                 }, 300);
             }
@@ -550,15 +549,15 @@ html_code = '''<!DOCTYPE html>
         // عرض التلميح
         async function showHint() {
             if (currentMission > 10) return;
-            
+
             const currentHint = teamMissions[currentMission - 1].hint;
             document.getElementById('hint-text').innerText = currentHint;
             document.getElementById('hint-box').style.display = 'block';
-            
+
             // خصم نقطتين
             hintsUsed++;
             totalPoints = Math.max(0, totalPoints - 2);
-            
+
             try {
                 await db.collection('teams').doc(currentTeam).update({
                     totalPoints: totalPoints,
@@ -567,8 +566,8 @@ html_code = '''<!DOCTYPE html>
             } catch (error) {
                 console.error("Hint update error:", error);
             }
-            
-            alert("💡 تم إظهار التلميح!\\nتم خصم نقطتين من رصيدك.");
+
+            alert("💡 تم إظهار التلميح!\nتم خصم نقطتين من رصيدك.");
         }
 
         // منع الخروج بالغلط
@@ -579,12 +578,4 @@ html_code = '''<!DOCTYPE html>
         };
     </script>
 </body>
-</html>'''
-
-# Save to file
-with open('/mnt/kimi/output/treasure_hunt_enhanced.html', 'w', encoding='utf-8') as f:
-    f.write(html_code)
-
-print("✅ تم إنشاء الملف بنجاح!")
-print(f"📁 المسار: /mnt/kimi/output/treasure_hunt_enhanced.html")
-print(f"📊 حجم الملف: {len(html_code)} حرف")
+</html>
