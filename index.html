@@ -261,7 +261,7 @@
         <!-- أزرار التحكم -->
         <div class="camera-controls">
             <button class="btn-secondary" onclick="restartScanner()">🔄 إعادة تشغيل الكاميرا</button>
-            <button class="btn-hint" onclick="showHint()">💡 طلب تلميح (-2 نقطة)</button>
+            <button class="btn-hint" onclick="showHint()">💡 طلب تلميح (-5 نقطة)</button>
         </div>
 
         <hr style="margin: 30px 0; border: none; border-top: 2px dashed #ddd;">
@@ -546,7 +546,7 @@
             }
         }
 
-        // عرض التلميح
+        // عرض التلميح - تم التعديل هنا
         async function showHint() {
             if (currentMission > 10) return;
 
@@ -554,9 +554,9 @@
             document.getElementById('hint-text').innerText = currentHint;
             document.getElementById('hint-box').style.display = 'block';
 
-            // خصم نقطتين
+            // خصم 5 نقاط (حتى لو السكور سالب)
             hintsUsed++;
-            totalPoints = Math.max(0, totalPoints - 2);
+            totalPoints -= 5;  // تعديل: خصم 5 نقاط بدلاً من 2، وسماح بالسالب
 
             try {
                 await db.collection('teams').doc(currentTeam).update({
@@ -567,7 +567,7 @@
                 console.error("Hint update error:", error);
             }
 
-            alert("💡 تم إظهار التلميح!\nتم خصم نقطتين من رصيدك.");
+            alert("💡 تم إظهار التلميح!\nتم خصم 5 نقاط من رصيدك.");
         }
 
         // منع الخروج بالغلط
