@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مغامرة البحث عن الكنز</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; text-align: center; margin: 0; padding: 15px; }
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+        h1 { color: #673ab7; }
+        .team-name { color: #ff9800; font-weight: bold; font-size: 22px; }
+        select, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #ddd; font-size: 16px; }
+        button { background: #673ab7; color: white; border: none; cursor: pointer; font-weight: bold; }
+        #reader { width: 100%; border-radius: 15px; overflow: hidden; margin-top: 15px; border: 2px solid #673ab7; background: #000; }
+        .mission-box { background: #fffde7; padding: 20px; border-right: 6px solid #fbc02d; margin: 20px 0; font-size: 19px; border-radius: 8px; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; }
+        th { background: #673ab7; color: white; }
+        .hidden { display: none; }
+        .success-flash { animation: flash 0.6s; }
+        @keyframes flash { 0% { opacity: 1; } 50% { background: #4caf50; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body id="main-body">
+
+    <div id="login-screen" class="card">
+        <h1>🧭 صيد الكنز</h1>
+        <p>اختر فريقك للبدء:</p>
+        <select id="team-select">
+            <option value="">-- اختر الفريق --</option>
+            <option value="الأحمر">الفريق الأحمر</option>
+            <option value="الأزرق">الفريق الأزرق</option>
+            <option value="الأخضر">الفريق الأخضر</option>
+            <option value="الأصفر">الفريق الأصفر</option>
+            <option value="البرتقالي">الفريق البرتقالي</option>
+            <option value="البنفسجي">الفريق البنفسجي</option>
+        </select>
+        <button onclick="startApp()">دخول اللعبة</button>
+    </div>
+
+    <div id="game-screen" class="card hidden">
+        <div class="team-name" id="team-display"></div>
+        <div class="mission-box">
+            <strong id="mission-title">المهمة رقم 1</strong>
+            <p id="mission-text">جاري تحميل اللغز...</p>
+        </div>
+        <div id="reader"></div>
+        <p id="scan-feedback" style="margin-top:10px; color:#666;">وجه الكاميرا بوضوح للكود</p>
+        
+        <hr>
+        <h3>🏆 ترتيب الفرق</h3>
+        <table>
+            <thead><tr><th>الفريق</th><th>المهمة</th><th>النقاط</th></tr></thead>
+            <tbody id="leaderboard-body"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyACJ9zKs8EiVCNN8CgOtCNknV1znLNjlY8",
+            authDomain: "spiritualtreasurehunt-684b9.firebaseapp.com",
+            projectId: "spiritualtreasurehunt-684b9", 
+            storageBucket: "spiritualtreasurehunt-684b9.firebasestorage.app",
+            messagingSenderId: "266754020181",
+            appId: "1:266754020181:web:67750b2f5a670a601195dc"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const allMissions = [
+            { q: "اللغز 1: أنا البداية والنهاية.. ابحث عني في مكان الصلاة المرتفع", key: "Alpha_Omega" },
+            { q: "اللغز 2: صوتي ينادي المؤمنين من أعلى المنارة.. ما هو؟", key: "Bells" },
+            { q: "اللغز 3: مكان يجتمع فيه الأطفال لتعلم كلمة الله..", key: "SundaySchool" },
+            { q: "اللغز 4: خبز نأكله لنحيا به.. ابحث عن صورته في الكنيسة", key: "Manna" },
+            { q: "اللغز 5: سفينة أنقذت العالم من الغرق.. ابحث عن مجسم لها", key: "Ark" },
+            { q: "اللغز 6: حجر دحرجه الملاك ليعلن القيامة..", key: "Stone" },
+            { q: "اللغز 7: شجرة أكل منها آدم.. ابحث عن صورتها", key: "Apple" },
+            { q: "اللغز 8: نبع ماء ارتوى منه الشعب في البرية..", key: "Rock" },
+            { q: "اللغز 9: بيت لحم.. مدينة ولد فيها الملك.. ابحث عن المزود", key: "King" },
+            { q: "اللغز 10: الصليب.. علامة نصرتنا.. ابحث عن أكبر صليب في القاعة", key: "Victory" }
+        ];
+
+        let currentTeam = "";
+        let currentMission = 1;
+        let teamMissions = [];
+        let html5QrCode;
+
+        function shuffleForTeam(teamName) {
+            let shuffled = [...allMissions];
+            let seed = teamName.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor((seed / (i + 1) + i) % (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        async function startApp() {
+            currentTeam = document.getElementById('team-select').value;
+            if (!currentTeam) return alert("اختر فريقك!");
+            teamMissions = shuffleForTeam(currentTeam);
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            document.getElementById('team-display').innerText = "فريق: " + currentTeam;
+            await loadProgress();
+            loadLeaderboard();
+            startScanner();
+        }
+
+        async function loadProgress() {
+            const doc = await db.collection('teams').doc(currentTeam).get();
+            if (doc.exists) {
+                currentMission = doc.data().currentMission || 1;
+            } else {
+                await db.collection('teams').doc(currentTeam).set({ currentMission: 1, totalPoints: 0 });
+            }
+            updateUI();
+        }
+
+        function updateUI() {
+            if (currentMission > 10) {
+                document.getElementById('mission-title').innerText = "تمت!";
+                document.getElementById('mission-text').innerText = "🎉 مبروك! لقد وصلتم للكنز!";
+                document.getElementById('reader').style.display = "none";
+            } else {
+                document.getElementById('mission-title').innerText = "المهمة " + currentMission + " من 10";
+                document.getElementById('mission-text').innerText = teamMissions[currentMission - 1].q;
+            }
+        }
+
+        function loadLeaderboard() {
+            db.collection('teams').orderBy('totalPoints', 'desc').onSnapshot(snap => {
+                let html = "";
+                snap.forEach(doc => {
+                    html += `<tr><td>${doc.id}</td><td>${doc.data().currentMission}</td><td>${doc.data().totalPoints}</td></tr>`;
+                });
+                document.getElementById('leaderboard-body').innerHTML = html;
+            });
+        }
+
+        function startScanner() {
+            if (html5QrCode) { html5QrCode.clear(); }
+            html5QrCode = new Html5Qrcode("reader");
+            
+            // إعدادات المسح (FPS أعلى لتحسين الاستجابة)
+            html5QrCode.start({ facingMode: "environment" }, { fps: 25, qrbox: 280 }, (text) => {
+                const scanned = text.trim().toLowerCase();
+                const target = teamMissions[currentMission - 1].key.toLowerCase();
+
+                // لو النص المقروء "يحتوي" على الكلمة السرية (عشان لو كان URL)
+                if (scanned.includes(target)) {
+                    document.getElementById('main-body').classList.add('success-flash');
+                    html5QrCode.stop().then(() => {
+                        handleSuccess();
+                    });
+                } else {
+                    document.getElementById('scan-feedback').innerText = "كود غير صحيح لهذه المهمة!";
+                    document.getElementById('scan-feedback').style.color = "red";
+                }
+            }).catch(err => console.error(err));
+        }
+
+        async function handleSuccess() {
+            currentMission++;
+            await db.collection('teams').doc(currentTeam).update({
+                currentMission: currentMission,
+                totalPoints: firebase.firestore.FieldValue.increment(10)
+            });
+            updateUI();
+            if (currentMission <= 10) {
+                alert("صح يا بطل! ادخل على المهمة اللي بعدها.");
+                startScanner();
+            }
+        }
+    </script>
+</body>
+</html>
