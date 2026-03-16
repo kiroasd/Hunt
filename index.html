@@ -12,17 +12,19 @@
         * { box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #5e35b1 100%); 
             text-align: center; 
             margin: 0; 
             padding: 15px; 
             min-height: 100vh;
+            color: white;
         }
         .card { 
-            background: white; 
+            background: rgba(255,255,255,0.95); 
+            color: #333;
             padding: 25px; 
             border-radius: 25px; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4); 
             max-width: 600px; 
             margin: 20px auto; 
             animation: slideIn 0.5s ease-out;
@@ -31,29 +33,25 @@
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        h1 { 
-            color: #673ab7; 
-            font-size: 28px; 
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
+        h1 { color: #1a237e; font-size: 28px; margin-bottom: 10px; }
         .subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
         .team-name { 
-            color: #ff9800; 
+            color: #ff6f00; 
             font-weight: bold; 
             font-size: 24px; 
-            background: #fff3e0;
-            padding: 10px;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 15px;
             border-radius: 15px;
             display: inline-block;
             margin-bottom: 15px;
             animation: pulse 2s infinite;
+            border: 2px solid #ff9800;
         }
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,152,0,0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(255,152,0,0.6); }
         }
-        select, button { 
+        select, button, input { 
             width: 100%; 
             padding: 18px; 
             margin: 10px 0; 
@@ -62,58 +60,204 @@
             font-size: 18px; 
             transition: all 0.3s;
         }
-        select:focus { border-color: #673ab7; outline: none; }
+        select:focus, input:focus { 
+            border-color: #3949ab; 
+            outline: none;
+            box-shadow: 0 0 10px rgba(57, 73, 171, 0.3);
+        }
         button { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%); 
             color: white; 
             border: none; 
             cursor: pointer; 
             font-weight: bold;
             font-size: 20px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 15px rgba(57, 73, 171, 0.4);
         }
         button:hover { 
             transform: translateY(-2px); 
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            box-shadow: 0 6px 20px rgba(57, 73, 171, 0.6);
         }
-        button:active { transform: translateY(0); }
+        button:disabled {
+            background: #bdbdbd !important;
+            cursor: not-allowed;
+            transform: none !important;
+        }
         #reader { 
             width: 100%; 
             border-radius: 20px; 
             overflow: hidden; 
             margin-top: 20px; 
-            border: 4px solid #673ab7; 
+            border: 4px solid #3949ab; 
             background: #000;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        .mission-box { 
-            background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%); 
-            padding: 25px; 
-            border-right: 8px solid #fbc02d; 
+        
+        .cipher-container { 
+            background: linear-gradient(135deg, #263238 0%, #37474f 100%); 
+            color: #fff;
+            padding: 30px; 
+            border-radius: 20px; 
             margin: 20px 0; 
-            font-size: 20px; 
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(251, 192, 45, 0.2);
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        .cipher-type {
+            background: #ffd700;
+            color: #263238;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .cipher-text {
+            font-family: 'Courier New', monospace;
+            font-size: 36px;
+            letter-spacing: 5px;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            direction: ltr;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            border: 1px dashed rgba(255,215,0,0.5);
+            word-break: break-all;
+        }
+        .cipher-instruction {
+            color: #b0bec5;
+            font-size: 16px;
+            margin-top: 15px;
             line-height: 1.6;
+        }
+        .cipher-level {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin: 15px 0;
+        }
+        .level-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #455a64;
+        }
+        .level-dot.active {
+            background: #ffd700;
+            box-shadow: 0 0 10px #ffd700;
+        }
+        
+        .verify-box {
+            background: #f5f5f5;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 2px dashed #3949ab;
+        }
+        .verify-input {
+            text-align: center;
+            font-size: 24px;
+            letter-spacing: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: #fff;
+            border: 3px solid #3949ab;
+        }
+        .verify-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%) !important;
+            font-size: 22px !important;
+        }
+        .verify-btn.success {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%) !important;
+        }
+        .verify-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+            font-size: 18px;
+            display: none;
+        }
+        .verify-message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+            display: block;
+        }
+        .verify-message.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+            display: block;
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .location-reveal {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #2e7d32;
+            padding: 30px;
+            border-radius: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 20px 0;
+            border: 3px solid #4caf50;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+            animation: revealPulse 0.5s ease-out;
+        }
+        @keyframes revealPulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .location-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+        .location-locked {
+            background: #eceff1;
+            color: #78909c;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 3px dashed #b0bec5;
+        }
+        .location-locked .lock-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .scanner-box {
+            background: #f5f5f5;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 2px dashed #3949ab;
         }
         .progress-bar {
             width: 100%;
-            height: 20px;
+            height: 25px;
             background: #e0e0e0;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
             margin: 15px 0;
+            border: 2px solid #fff;
         }
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            background: linear-gradient(90deg, #4caf50, #8bc34a, #cddc39);
             transition: width 0.5s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #1b5e20;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 14px;
         }
         table { 
             width: 100%; 
@@ -128,7 +272,7 @@
             border-bottom: 1px solid #eee; 
         }
         th { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%); 
             color: white;
             font-weight: bold;
         }
@@ -161,20 +305,22 @@
             background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%) !important;
         }
         .btn-hint {
-            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%) !important;
+            background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%) !important;
         }
         #scan-feedback { 
             margin-top: 15px; 
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
             font-weight: bold;
             transition: all 0.3s;
+            font-size: 16px;
         }
         .winner-screen {
             background: linear-gradient(135deg, #ffd700 0%, #ff9800 100%);
             padding: 40px;
             border-radius: 25px;
             animation: winnerPulse 1s infinite alternate;
+            color: #333;
         }
         @keyframes winnerPulse {
             from { transform: scale(1); box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
@@ -195,10 +341,11 @@
         .hint-box {
             background: #e3f2fd;
             border-right: 4px solid #2196f3;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
             display: none;
+            font-size: 18px;
         }
         .status-indicator {
             display: inline-block;
@@ -213,6 +360,48 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .step {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            background: #e0e0e0;
+            color: #666;
+            position: relative;
+        }
+        .step.active {
+            background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%);
+            color: white;
+            animation: pulse 1s infinite;
+            box-shadow: 0 0 20px rgba(57, 73, 171, 0.5);
+        }
+        .step.completed {
+            background: #4caf50;
+            color: white;
+        }
+        .step::after {
+            content: attr(data-label);
+            position: absolute;
+            bottom: -25px;
+            font-size: 12px;
+            white-space: nowrap;
+            color: #666;
+            font-weight: normal;
+        }
+        .paper-icon {
+            font-size: 40px;
+            margin: 10px;
+        }
     </style>
 </head>
 <body id="main-body">
@@ -220,60 +409,149 @@
     <!-- صفحة تسجيل الدخول -->
     <div id="login-screen" class="card">
         <h1>🧭 صيد الكنز الرقمي</h1>
-        <p class="subtitle">مسابقة تفاعلية للبحث عن الألغاز المخفية</p>
-        <p>اختر فريقك للبدء:</p>
+        <p class="subtitle">مسابقة جماعية لحل الشفرات المقدسة</p>
+        <div class="paper-icon">📜🔐📜</div>
+        <p style="font-size: 16px; color: #555; margin-bottom: 20px;">
+            لديك <strong>ورقة مفاتيح سرية</strong>!<br>
+            استخدمها لفك الشفرات وإيجاد الأماكن المخفية
+        </p>
         <select id="team-select">
-            <option value="">-- اختر الفريق --</option>
-            <option value="الأحمر">🔴 الفريق الأحمر</option>
-            <option value="الأزرق">🔵 الفريق الأزرق</option>
-            <option value="الأخضر">🟢 الفريق الأخضر</option>
-            <option value="الأصفر">🟡 الفريق الأصفر</option>
-            <option value="البرتقالي">🟠 الفريق البرتقالي</option>
-            <option value="البنفسجي">🟣 الفريق البنفسجي</option>
+            <option value="">-- اختر القديس --</option>
+            <option value="مارمينا">🐪 القديس مارمينا</option>
+            <option value="مارجرجس">🐎 القديس مارجرجس</option>
+            <option value="مارمرقس">🦁 القديس مارمرقس</option>
+            <option value="العذراء_مريم">👑 العذراء القديسة مريم</option>
+            <option value="الشهيدة_دميانة">⚜️ الشهيدة دميانة</option>
+            <option value="الأنبا_أنطونيوس">🌟 الأنبا أنطونيوس</option>
         </select>
-        <button onclick="startApp()">🚀 دخول اللعبة</button>
-        <p style="font-size: 12px; color: #999; margin-top: 20px;">تأكد من تشغيل الكاميرا والموقع</p>
+        <button onclick="startApp()">🚀 بدء المغامرة</button>
+        <p style="font-size: 12px; color: #999; margin-top: 20px;">
+            💡 تلميح: اطبع ورقة المفاتيح وخذها معك!
+        </p>
     </div>
 
     <!-- شاشة اللعبة -->
     <div id="game-screen" class="card hidden">
         <div class="team-name" id="team-display"></div>
 
+        <!-- خطوات اللعبة -->
+        <div class="step-indicator">
+            <div class="step active" id="step-1" data-label="الشفرة">١</div>
+            <div class="step" id="step-2" data-label="التحقق">٢</div>
+            <div class="step" id="step-3" data-label="الماسح">٣</div>
+        </div>
+
         <!-- شريط التقدم -->
         <div class="progress-bar">
-            <div class="progress-fill" id="progress-bar" style="width: 10%">1/10</div>
+            <div class="progress-fill" id="progress-bar" style="width: 10%">1 / 10</div>
         </div>
 
-        <div class="mission-box">
-            <strong id="mission-title">المهمة رقم 1</strong>
-            <p id="mission-text">جاري تحميل اللغز...</p>
+        <!-- المرحلة 1: عرض الشفرة -->
+        <div id="cipher-phase">
+            <div style="background: #fff3e0; padding: 15px; border-radius: 15px; margin-bottom: 20px; border-right: 5px solid #ff9800;">
+                <strong style="color: #e65100; font-size: 20px;">
+                    🔐 الشفرة رقم <span id="mission-number">1</span> من 10
+                </strong>
+            </div>
+
+            <div class="cipher-container">
+                <div class="cipher-type" id="cipher-type">شفرة قيسار</div>
+                <div class="cipher-level" id="cipher-level">
+                    <div class="level-dot active"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                </div>
+                
+                <div class="cipher-text" id="cipher-display">?????</div>
+                
+                <div class="cipher-instruction" id="cipher-instruction">
+                    استخدم <strong>المفتاح الأول</strong> في ورقتك<br>
+                    حرك كل حرف 3 خطوات للخلف في الأبجدية
+                </div>
+            </div>
+
+            <!-- صندوق التحقق من الحل -->
+            <div class="verify-box">
+                <div style="font-size: 18px; font-weight: bold; color: #3949ab; margin-bottom: 15px;">
+                    ✏️ اكتب الحل هنا (بالإنجليزي):
+                </div>
+                <input 
+                    type="text" 
+                    id="solution-input" 
+                    class="verify-input" 
+                    placeholder="ALTAR"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+                <button class="verify-btn" id="verify-btn" onclick="verifySolution()">
+                    ✅ تحقق من الحل
+                </button>
+                
+                <div id="verify-message" class="verify-message"></div>
+            </div>
+
+            <!-- المكان المقفل (يظهر بعد التحقق) -->
+            <div id="location-locked" class="location-locked">
+                <div class="lock-icon">🔒</div>
+                <div style="font-size: 20px; font-weight: bold; color: #78909c;">
+                    المكان مقفل!
+                </div>
+                <div style="font-size: 16px; color: #90a4ae; margin-top: 10px;">
+                    افك الشفرة أولاً لإظهار المكان
+                </div>
+            </div>
+
+            <div id="location-reveal" class="location-reveal hidden">
+                <div class="location-icon" id="location-icon">⛪</div>
+                <div>🎯 اذهب إلى:</div>
+                <div id="location-name" style="font-size: 32px; margin-top: 15px; color: #1b5e20;"></div>
+                <button onclick="startScanPhase()" style="margin-top: 20px; background: linear-gradient(135deg, #ff5722 0%, #d84315 100%); font-size: 20px;">
+                    📷 وجدت المكان! افتح الماسح
+                </button>
+            </div>
+
+            <!-- صندوق التلميحات -->
+            <div class="hint-box" id="hint-box">
+                <strong>💡 تلميح المكان:</strong><br>
+                <span id="hint-text"></span>
+            </div>
+
+            <button class="btn-hint" onclick="showHint()">
+                💡 محتاج مساعدة؟ (-5 نقاط)
+            </button>
         </div>
 
-        <!-- صندوق التلميحات -->
-        <div class="hint-box" id="hint-box">
-            <strong>💡 تلميح:</strong> <span id="hint-text"></span>
-        </div>
-
-        <!-- الكاميرا -->
-        <div id="reader"></div>
-        <p id="scan-feedback"><span class="status-indicator"></span> وجه الكاميرا بوضوح للكود</p>
-
-        <!-- أزرار التحكم -->
-        <div class="camera-controls">
-            <button class="btn-secondary" onclick="restartScanner()">🔄 إعادة تشغيل الكاميرا</button>
-            <button class="btn-hint" onclick="showHint()">💡 طلب تلميح (-5 نقطة)</button>
+        <!-- المرحلة 2: الماسح -->
+        <div id="scan-phase" class="hidden">
+            <div class="scanner-box">
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 15px; color: #1565c0;">
+                    <strong>📍 المطلوب:</strong> <span id="scan-target"></span>
+                </div>
+                
+                <div id="reader"></div>
+                
+                <p id="scan-feedback" style="margin-top: 15px; padding: 15px; background: #f5f5f5; border-radius: 10px;">
+                    <span class="status-indicator"></span> 
+                    وجه الكاميرا على كود QR في <span id="scan-location-name"></span>
+                </p>
+                
+                <div class="camera-controls">
+                    <button class="btn-secondary" onclick="restartScanner()">🔄 إعادة تشغيل</button>
+                    <button onclick="backToCipher()" style="background: #757575 !important;">🔙 رجوع للشفرة</button>
+                </div>
+            </div>
         </div>
 
         <hr style="margin: 30px 0; border: none; border-top: 2px dashed #ddd;">
 
         <!-- لوحة المتصدرين -->
-        <h3>🏆 ترتيب الفرق <span class="status-indicator"></span></h3>
+        <h3 style="color: #1a237e;">🏆 ترتيب القديسين <span class="status-indicator"></span></h3>
         <table>
             <thead>
                 <tr>
                     <th>الترتيب</th>
-                    <th>الفريق</th>
-                    <th>المهمة</th>
+                    <th>القديس</th>
+                    <th>التقدم</th>
                     <th>النقاط</th>
                 </tr>
             </thead>
@@ -284,11 +562,18 @@
     <!-- شاشة الفوز -->
     <div id="winner-screen" class="card hidden winner-screen">
         <div class="trophy">🏆</div>
-        <h1 style="color: #333; font-size: 32px;">مبروك يا أبطال!</h1>
-        <h2 id="winner-team" style="color: #d32f2f;"></h2>
-        <p style="font-size: 20px; color: #333; font-weight: bold;">لقد وجدتم الكنز! 🎉</p>
-        <p style="font-size: 18px; margin-top: 20px;">النقاط النهائية: <span id="final-points" style="font-size: 28px; color: #d32f2f;">100</span></p>
-        <button onclick="location.reload()" style="margin-top: 30px; background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);">🔄 لعبة جديدة</button>
+        <h1 style="font-size: 36px; margin-bottom: 10px;">مبروك يا فريق!</h1>
+        <h2 id="winner-team" style="color: #bf360c; font-size: 28px;"></h2>
+        <p style="font-size: 22px; font-weight: bold; margin: 20px 0;">
+            🎉 أكملتم المغامرة المقدسة بنجاح! 🎉
+        </p>
+        <div style="background: rgba(255,255,255,0.3); padding: 20px; border-radius: 15px; margin: 20px 0;">
+            <p style="font-size: 18px; margin: 0;">النقاط النهائية:</p>
+            <p id="final-points" style="font-size: 48px; font-weight: bold; color: #bf360c; margin: 10px 0;">0</p>
+        </div>
+        <button onclick="location.reload()" style="background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); font-size: 20px;">
+            🔄 لعبة جديدة
+        </button>
     </div>
 
     <!-- صوت النجاح -->
@@ -313,19 +598,120 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // بيانات الألغاز
-        const allMissions = [
-            { q: "🔍 اللغز 1: أنا البداية والنهاية.. ابحث عني في مكان الصلاة المرتفع", key: "Alpha_Omega", hint: "ابحث في المكان المرتفع حيث يقف الكاهن" },
-            { q: "🔔 اللغز 2: صوتي ينادي المؤمنين من أعلى المنارة.. ما هو؟", key: "Bells", hint: "استمع للصوت العالي في الكنيسة" },
-            { q: "📚 اللغز 3: مكان يجتمع فيه الأطفال لتعلم كلمة الله..", key: "SundaySchool", hint: "غرفة الأطفال الصغار" },
-            { q: "🍞 اللغز 4: خبز نأكله لنحيا به.. ابحث عن صورته في الكنيسة", key: "Manna", hint: "القربان المقدس" },
-            { q: "🚢 اللغز 5: سفينة أنقذت العالم من الغرق.. ابحث عن مجسم لها", key: "Ark", hint: "سفينة نوح" },
-            { q: "🪨 اللغز 6: حجر دحرجه الملاك ليعلن القيامة..", key: "Stone", hint: "باب القبر الفارغ" },
-            { q: "🍎 اللغز 7: شجرة أكل منها آدم.. ابحث عن صورتها", key: "Apple", hint: "جنة عدن" },
-            { q: "💧 اللغز 8: نبع ماء ارتوى منه الشعب في البرية..", key: "Rock", hint: "صخرة موسى" },
-            { q: "👑 اللغز 9: بيت لحم.. مدينة ولد فيها الملك.. ابحث عن المزود", key: "King", hint: "مكان ميلاد يسوع" },
-            { q: "✝️ اللغز 10: الصليب.. علامة نصرتنا.. ابحث عن أكبر صليب في القاعة", key: "Victory", hint: "أعلى مكان في القاعة" }
+        // أنواع الشفرات
+        const cipherTypes = [
+            { name: "قيسار", level: 1, instruction: "حرك كل حرف 3 خطوات للخلف (A→X, B→Y, C→Z, D→A...)" },
+            { name: "عكسية", level: 2, instruction: "اقلب الكلمة بالكامل (أول حرف يبقى آخر حرف)" },
+            { name: "صليبية", level: 3, instruction: "اكتب الحروف عمودياً (حرف تحت حرف) واقرأ من فوق لتحت" }
         ];
+
+        // بيانات الأماكن والشفرات - مصححة بالكامل
+        const allLocations = [
+            { 
+                id: "altar", 
+                name: "المذبح الرئيسي", 
+                icon: "⛪",
+                cipher: "DOWDU", // ALTAR: A→D, L→O, T→W, A→D, R→U
+                solution: "ALTAR",
+                cipherType: 0,
+                hint: "المكان المرتفع حيث يقف الكاهن ويرفع القداس الإلهي" 
+            },
+            { 
+                id: "bell", 
+                name: "المنارة العالية", 
+                icon: "🔔",
+                cipher: "EHOOR", // BELL: B→E, E→H, L→O, L→O
+                solution: "BELL",
+                cipherType: 0,
+                hint: "أعلى مكان في الكنيسة، صوته ينادي المؤمنين للصلاة" 
+            },
+            { 
+                id: "school", 
+                name: "مدرسة الأحد", 
+                icon: "📚",
+                cipher: "LOOHCS", // SCHOOL معكوس
+                solution: "SCHOOL",
+                cipherType: 1,
+                hint: "المكان الذي يتعلم فيه الأطفال قصص القديسين" 
+            },
+            { 
+                id: "bread", 
+                name: "القربان المقدس", 
+                icon: "🍞",
+                cipher: "DAERB", // BREAD معكوس
+                solution: "BREAD",
+                cipherType: 1,
+                hint: "الخبز المقدس في التابوت الذهبي" 
+            },
+            { 
+                id: "noah", 
+                name: "سفينة نوح", 
+                icon: "🚢",
+                cipher: "HAON", // NOAH معكوس
+                solution: "NOAH",
+                cipherType: 1,
+                hint: "مجسم السفينة التي أنقذت العالم من الطوفان" 
+            },
+            { 
+                id: "stone", 
+                name: "القبر الفارغ", 
+                icon: "🪨",
+                cipher: "S-T-O-N-E", // STONE صليبية
+                solution: "STONE",
+                cipherType: 2,
+                hint: "الحجر الذي دحرجه الملاك يوم القيامة المجيدة" 
+            },
+            { 
+                id: "eden", 
+                name: "شجرة الحياة", 
+                icon: "🌳",
+                cipher: "E-D-E-N", // EDEN صليبية
+                solution: "EDEN",
+                cipherType: 2,
+                hint: "الشجرة التي في جنة عدن بجانب المذبح" 
+            },
+            { 
+                id: "water", 
+                name: "صخرة موسى", 
+                icon: "💧",
+                cipher: "RETAW", // WATER معكوس
+                solution: "WATER",
+                cipherType: 1,
+                hint: "الصخرة التي انبجست منها المياه في البرية" 
+            },
+            { 
+                id: "bethlehem", 
+                name: "المزود المقدس", 
+                icon: "👶",
+                cipher: "MEHELHTEB", // BETHLEHEM معكوس
+                solution: "BETHLEHEM",
+                cipherType: 1,
+                hint: "مكان ميلاد السيد المسيح في بيت لحم" 
+            },
+            { 
+                id: "cross", 
+                name: "الصليب الذهبي", 
+                icon: "✝️",
+                cipher: "S-S-O-R-C", // CROSS صليبية (مقلوبة)
+                solution: "CROSS",
+                cipherType: 2,
+                hint: "أعلى صليب في القاعة الرئيسية للكنيسة" 
+            }
+        ];
+
+        // أكواد QR الفعلية
+        const qrCodes = {
+            "LOC-ALTAR": "altar",
+            "LOC-BELL": "bell",
+            "LOC-SCHOOL": "school",
+            "LOC-BREAD": "bread",
+            "LOC-NOAH": "noah",
+            "LOC-STONE": "stone",
+            "LOC-EDEN": "eden",
+            "LOC-WATER": "water",
+            "LOC-BETHLEHEM": "bethlehem",
+            "LOC-CROSS": "cross"
+        };
 
         let currentTeam = "";
         let currentMission = 1;
@@ -333,10 +719,11 @@
         let html5QrCode;
         let totalPoints = 0;
         let hintsUsed = 0;
+        let isVerified = false;
 
         // توليد ترتيب عشوائي ثابت للفريق
         function shuffleForTeam(teamName) {
-            let shuffled = [...allMissions];
+            let shuffled = [...allLocations];
             let seed = teamName.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor((seed / (i + 1) + i) % (i + 1));
@@ -349,20 +736,19 @@
         async function startApp() {
             currentTeam = document.getElementById('team-select').value;
             if (!currentTeam) {
-                alert("⚠️ اختر فريقك أولاً!");
+                alert("⚠️ اختر قديسك أولاً!");
                 return;
             }
 
-            // توليد نفس الترتيب كل مرة
             teamMissions = shuffleForTeam(currentTeam);
 
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
-            document.getElementById('team-display').innerText = "فريق: " + currentTeam;
+            document.getElementById('team-display').innerText = "فريق: " + currentTeam.replace(/_/g, ' ');
 
             await loadProgress();
             loadLeaderboard();
-            startScanner();
+            showCipherPhase();
         }
 
         // تحميل التقدم
@@ -373,7 +759,6 @@
                     currentMission = doc.data().currentMission || 1;
                     totalPoints = doc.data().totalPoints || 0;
                     hintsUsed = doc.data().hintsUsed || 0;
-                    // التأكد من استخدام نفس الترتيب
                     teamMissions = shuffleForTeam(currentTeam);
                 } else {
                     await db.collection('teams').doc(currentTeam).set({ 
@@ -386,38 +771,177 @@
                 updateUI();
             } catch (error) {
                 console.error("Error loading progress:", error);
-                alert("⚠️ خطأ في الاتصال. جاري العمل في الوضع المحلي...");
             }
+        }
+
+        // عرض مرحلة الشفرة
+        function showCipherPhase() {
+            isVerified = false;
+            document.getElementById('cipher-phase').classList.remove('hidden');
+            document.getElementById('scan-phase').classList.add('hidden');
+            
+            document.getElementById('step-1').classList.add('active');
+            document.getElementById('step-2').classList.remove('active');
+            document.getElementById('step-3').classList.remove('active');
+            document.getElementById('step-1').classList.remove('completed');
+            document.getElementById('step-2').classList.remove('completed');
+            
+            // إعادة تعيين صندوق التحقق
+            document.getElementById('solution-input').value = '';
+            document.getElementById('solution-input').disabled = false;
+            document.getElementById('verify-btn').disabled = false;
+            document.getElementById('verify-btn').innerText = '✅ تحقق من الحل';
+            document.getElementById('verify-btn').classList.remove('success');
+            document.getElementById('verify-message').className = 'verify-message';
+            document.getElementById('verify-message').innerText = '';
+            
+            // إخفاء المكان وإظهار القفل
+            document.getElementById('location-locked').classList.remove('hidden');
+            document.getElementById('location-reveal').classList.add('hidden');
+            
+            if (html5QrCode) {
+                html5QrCode.stop().catch(() => {});
+            }
+            
+            updateUI();
+        }
+
+        // التحقق من الحل
+        function verifySolution() {
+            const input = document.getElementById('solution-input').value.trim().toUpperCase();
+            const currentLoc = teamMissions[currentMission - 1];
+            const correctSolution = currentLoc.solution.toUpperCase();
+            
+            const msgBox = document.getElementById('verify-message');
+            
+            if (input === correctSolution) {
+                // ✅ الحل صحيح
+                isVerified = true;
+                
+                msgBox.className = 'verify-message success';
+                msgBox.innerHTML = '🎉 أحسنت! الحل صحيح!<br>المكان الآن مفتوح لك';
+                
+                // تعطيل الإدخال وزر التحقق
+                document.getElementById('solution-input').disabled = true;
+                document.getElementById('verify-btn').disabled = true;
+                document.getElementById('verify-btn').innerText = '✅ تم التحقق';
+                document.getElementById('verify-btn').classList.add('success');
+                
+                // إظهار المكان
+                document.getElementById('location-locked').classList.add('hidden');
+                document.getElementById('location-reveal').classList.remove('hidden');
+                document.getElementById('location-icon').innerText = currentLoc.icon;
+                document.getElementById('location-name').innerText = currentLoc.name;
+                
+                // تحديث الخطوات
+                document.getElementById('step-1').classList.remove('active');
+                document.getElementById('step-1').classList.add('completed');
+                document.getElementById('step-2').classList.add('active');
+                
+                // صوت نجاح
+                const successSound = document.getElementById('success-sound');
+                successSound.volume = 0.3;
+                successSound.play().catch(() => {});
+                
+                // تمرير للمكان
+                document.getElementById('location-reveal').scrollIntoView({ behavior: 'smooth' });
+                
+            } else {
+                // ❌ الحل غلط
+                msgBox.className = 'verify-message error';
+                
+                let hint = '';
+                if (input.length !== correctSolution.length) {
+                    hint = `<br>💡 عدد الحروف غير صحيح (يجب أن يكون ${correctSolution.length} حروف)`;
+                } else {
+                    hint = '<br>💡 راجع المفتاح في ورقتك وحاول مرة أخرى';
+                }
+                
+                msgBox.innerHTML = `❌ الحل غير صحيح!${hint}`;
+                
+                // إفراغ الحقل للمحاولة مرة أخرى
+                document.getElementById('solution-input').value = '';
+                document.getElementById('solution-input').focus();
+            }
+        }
+
+        // السماح بالضغط على Enter للتحقق
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('solution-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifySolution();
+                }
+            });
+        });
+
+        // بدء مرحلة المسح
+        function startScanPhase() {
+            if (!isVerified) {
+                alert('⚠️ يجب فك الشفرة أولاً!');
+                return;
+            }
+            
+            document.getElementById('cipher-phase').classList.add('hidden');
+            document.getElementById('scan-phase').classList.remove('hidden');
+            
+            document.getElementById('step-2').classList.remove('active');
+            document.getElementById('step-2').classList.add('completed');
+            document.getElementById('step-3').classList.add('active');
+            
+            const currentLoc = teamMissions[currentMission - 1];
+            document.getElementById('scan-target').innerText = currentLoc.name;
+            document.getElementById('scan-location-name').innerText = currentLoc.name;
+            
+            startScanner();
+        }
+
+        // رجوع للشفرة
+        function backToCipher() {
+            showCipherPhase();
         }
 
         // تحديث الواجهة
         function updateUI() {
             const progress = ((currentMission - 1) / 10) * 100;
             document.getElementById('progress-bar').style.width = progress + '%';
-            document.getElementById('progress-bar').innerText = Math.min(currentMission, 10) + '/10';
+            document.getElementById('progress-bar').innerText = Math.min(currentMission, 10) + ' / 10';
 
             if (currentMission > 10) {
                 showWinnerScreen();
-            } else {
-                document.getElementById('mission-title').innerText = "المهمة " + currentMission + " من 10";
-                document.getElementById('mission-text').innerText = teamMissions[currentMission - 1].q;
-                document.getElementById('hint-box').style.display = 'none';
+                return;
             }
+
+            const currentLoc = teamMissions[currentMission - 1];
+            document.getElementById('mission-number').innerText = currentMission;
+            document.getElementById('cipher-display').innerText = currentLoc.cipher;
+            document.getElementById('hint-text').innerText = currentLoc.hint;
+            document.getElementById('hint-box').style.display = 'none';
+            
+            // تحديث نوع الشفرة
+            const cipherInfo = cipherTypes[currentLoc.cipherType];
+            document.getElementById('cipher-type').innerText = "شفرة " + cipherInfo.name;
+            document.getElementById('cipher-instruction').innerHTML = 
+                "استخدم <strong>المفتاح " + (currentLoc.cipherType + 1) + "</strong> في ورقتك<br>" +
+                cipherInfo.instruction;
+            
+            // تحديث مستوى الصعوبة
+            const dots = document.querySelectorAll('.level-dot');
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx <= currentLoc.cipherType);
+            });
         }
 
         // عرض شاشة الفوز
         function showWinnerScreen() {
             document.getElementById('game-screen').classList.add('hidden');
             document.getElementById('winner-screen').classList.remove('hidden');
-            document.getElementById('winner-team').innerText = currentTeam;
+            document.getElementById('winner-team').innerText = currentTeam.replace(/_/g, ' ');
             document.getElementById('final-points').innerText = totalPoints;
 
-            // تشغيل صوت الفوز
             const winnerSound = document.getElementById('winner-sound');
             winnerSound.volume = 0.5;
-            winnerSound.play().catch(e => console.log('Audio play failed:', e));
+            winnerSound.play().catch(() => {});
 
-            // تأثير الكونفيتي
             createConfetti();
         }
 
@@ -444,17 +968,17 @@
                 let rank = 1;
                 snap.forEach(doc => {
                     const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+                    const teamName = doc.id.replace(/_/g, ' ');
+                    const currentMissionNum = doc.data().currentMission > 10 ? '✅' : doc.data().currentMission;
                     html += `<tr>
                         <td>${medal}</td>
-                        <td><strong>${doc.id}</strong></td>
-                        <td>${doc.data().currentMission > 10 ? '✅' : doc.data().currentMission}/10</td>
-                        <td style="color: #4caf50; font-weight: bold;">${doc.data().totalPoints || 0}</td>
+                        <td><strong>${teamName}</strong></td>
+                        <td>${currentMissionNum}/10</td>
+                        <td style="color: ${(doc.data().totalPoints || 0) < 0 ? '#f44336' : '#4caf50'}; font-weight: bold;">${doc.data().totalPoints || 0}</td>
                     </tr>`;
                     rank++;
                 });
                 document.getElementById('leaderboard-body').innerHTML = html;
-            }, error => {
-                console.error("Leaderboard error:", error);
             });
         }
 
@@ -472,9 +996,7 @@
                 (text) => {
                     handleScan(text);
                 },
-                (error) => {
-                    // تجاهل أخطاء المسح المستمرة
-                }
+                (error) => {}
             ).catch(err => {
                 console.error("Scanner error:", err);
                 document.getElementById('scan-feedback').innerText = "⚠️ لا يمكن تشغيل الكاميرا. تأكد من إعطاء الإذن.";
@@ -491,32 +1013,43 @@
 
         // معالجة المسح
         function handleScan(text) {
-            const scanned = text.trim().toLowerCase();
-            const target = teamMissions[currentMission - 1].key.toLowerCase();
+            const scanned = text.trim().toUpperCase();
+            const targetLocationId = teamMissions[currentMission - 1].id;
+            const expectedQR = "LOC-" + targetLocationId.toUpperCase();
 
-            if (scanned.includes(target)) {
-                // نجاح!
+            const scannedLocation = qrCodes[scanned];
+            
+            if (scanned === expectedQR || scannedLocation === targetLocationId) {
                 document.getElementById('main-body').classList.add('success-flash');
-                document.getElementById('scan-feedback').innerText = "✅ كود صحيح! جاري التحميل...";
-                document.getElementById('scan-feedback').style.color = "green";
-
-                // تشغيل الصوت
+                document.getElementById('scan-feedback').innerHTML = 
+                    "<span style='color: #2e7d32;'>✅ كود صحيح! تم التحقق من المكان</span>";
+                
                 const successSound = document.getElementById('success-sound');
                 successSound.volume = 0.3;
-                successSound.play().catch(e => console.log('Audio play failed:', e));
+                successSound.play().catch(() => {});
 
                 html5QrCode.stop().then(() => {
                     setTimeout(() => {
                         document.getElementById('main-body').classList.remove('success-flash');
                         handleSuccess();
-                    }, 1000);
+                    }, 1500);
                 });
-            } else {
-                document.getElementById('scan-feedback').innerText = "❌ كود غير صحيح لهذه المهمة!";
-                document.getElementById('scan-feedback').style.color = "red";
+            } else if (scannedLocation) {
+                document.getElementById('scan-feedback').innerHTML = 
+                    "<span style='color: #f57c00;'>⚠️ هذا كود لمكان آخر! ابحث عن " + 
+                    teamMissions[currentMission - 1].name + "</span>";
                 setTimeout(() => {
-                    document.getElementById('scan-feedback').innerText = "وجه الكاميرا بوضوح للكود";
-                    document.getElementById('scan-feedback').style.color = "#666";
+                    document.getElementById('scan-feedback').innerHTML = 
+                        '<span class="status-indicator"></span> وجه الكاميرا على كود QR في ' + 
+                        teamMissions[currentMission - 1].name;
+                }, 3000);
+            } else {
+                document.getElementById('scan-feedback').innerHTML = 
+                    "<span style='color: #d32f2f;'>❌ كود غير معروف!</span>";
+                setTimeout(() => {
+                    document.getElementById('scan-feedback').innerHTML = 
+                        '<span class="status-indicator"></span> وجه الكاميرا على كود QR في ' + 
+                        teamMissions[currentMission - 1].name;
                 }, 2000);
             }
         }
@@ -536,27 +1069,25 @@
                 console.error("Update error:", error);
             }
 
-            updateUI();
-
             if (currentMission <= 10) {
                 setTimeout(() => {
-                    alert("🎉 صح يا بطل! +10 نقاط\n\nالمهمة اللي جاية جاهزين؟");
-                    startScanner();
+                    alert("🎉 ممتاز! +10 نقاط\n\nالشفرة الجديدة جاهزة!");
+                    showCipherPhase();
                 }, 300);
+            } else {
+                updateUI();
             }
         }
 
-        // عرض التلميح - تم التعديل هنا
+        // عرض التلميح
         async function showHint() {
             if (currentMission > 10) return;
 
-            const currentHint = teamMissions[currentMission - 1].hint;
-            document.getElementById('hint-text').innerText = currentHint;
+            document.getElementById('hint-text').innerText = teamMissions[currentMission - 1].hint;
             document.getElementById('hint-box').style.display = 'block';
 
-            // خصم 5 نقاط (حتى لو السكور سالب)
             hintsUsed++;
-            totalPoints -= 5;  // تعديل: خصم 5 نقاط بدلاً من 2، وسماح بالسالب
+            totalPoints -= 5;
 
             try {
                 await db.collection('teams').doc(currentTeam).update({
@@ -567,7 +1098,7 @@
                 console.error("Hint update error:", error);
             }
 
-            alert("💡 تم إظهار التلميح!\nتم خصم 5 نقاط من رصيدك.");
+            document.getElementById('hint-box').scrollIntoView({ behavior: 'smooth' });
         }
 
         // منع الخروج بالغلط
