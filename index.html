@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>مغامرة البحث عن الكنز</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -18,6 +18,11 @@
             padding: 15px; 
             min-height: 100vh;
             color: white;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
         }
         .card { 
             background: rgba(255,255,255,0.95); 
@@ -29,11 +34,16 @@
             margin: 20px auto; 
             animation: slideIn 0.5s ease-out;
         }
+        body.light-mode .card {
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         h1 { color: #1a237e; font-size: 28px; margin-bottom: 10px; }
+        body.light-mode h1 { color: #0d47a1; }
         .subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
         .team-name { 
             color: #ff6f00; 
@@ -74,6 +84,9 @@
             font-size: 20px;
             box-shadow: 0 4px 15px rgba(57, 73, 171, 0.4);
         }
+        body.light-mode button {
+            background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+        }
         button:hover { 
             transform: translateY(-2px); 
             box-shadow: 0 6px 20px rgba(57, 73, 171, 0.6);
@@ -101,6 +114,10 @@
             margin: 20px 0; 
             border: 3px solid #ffd700;
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        body.light-mode .cipher-container {
+            background: linear-gradient(135deg, #eceff1 0%, #cfd8dc 100%);
+            color: #263238;
         }
         .cipher-type {
             background: #ffd700;
@@ -131,11 +148,18 @@
             border: 1px dashed rgba(255,215,0,0.5);
             word-break: break-all;
         }
+        body.light-mode .cipher-text {
+            background: rgba(255,255,255,0.5);
+            color: #1a237e;
+        }
         .cipher-instruction {
             color: #b0bec5;
             font-size: 16px;
             margin-top: 15px;
             line-height: 1.6;
+        }
+        body.light-mode .cipher-instruction {
+            color: #455a64;
         }
         
         .verify-box {
@@ -252,6 +276,9 @@
             background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%); 
             color: white;
             font-weight: bold;
+        }
+        body.light-mode th {
+            background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
         }
         tr:nth-child(even) { background: #f5f5f5; }
         tr:hover { background: #e8eaf6; }
@@ -404,6 +431,9 @@
             color: #666;
             font-weight: normal;
         }
+        body.light-mode .step::after {
+            color: #333;
+        }
         .paper-icon {
             font-size: 40px;
             margin: 10px;
@@ -448,11 +478,18 @@
             border-radius: 15px;
             border: 2px solid rgba(255,255,255,0.3);
         }
+        body.light-mode .leaderboard-section {
+            background: rgba(0,0,0,0.05);
+            border: 2px solid rgba(0,0,0,0.1);
+        }
         .leaderboard-title {
             color: #ffd700;
             font-size: 24px;
             margin-bottom: 15px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        body.light-mode .leaderboard-title {
+            color: #ff6f00;
         }
         
         .leaderboard-error {
@@ -467,6 +504,84 @@
             color: #666;
             padding: 20px;
             font-style: italic;
+        }
+        
+        /* تحسينات الجوال */
+        @media (max-width: 480px) {
+            .card {
+                padding: 15px;
+                margin: 10px auto;
+            }
+            
+            h1 { font-size: 24px; }
+            
+            .cipher-text {
+                font-size: 24px;
+                padding: 10px;
+                letter-spacing: 2px;
+            }
+            
+            .step {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            .help-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .camera-controls button {
+                min-width: 100%;
+            }
+            
+            .team-name {
+                font-size: 18px;
+                padding: 10px;
+            }
+            
+            .location-reveal {
+                font-size: 24px;
+                padding: 20px;
+            }
+            
+            button {
+                font-size: 16px;
+                padding: 14px;
+            }
+            
+            .verify-input {
+                font-size: 20px;
+            }
+        }
+        
+        /* تحسينات للأجهزة اللوحية */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .card {
+                max-width: 90%;
+            }
+            
+            .cipher-text {
+                font-size: 28px;
+            }
+        }
+        
+        /* زر تبديل المظهر */
+        .theme-toggle {
+            background: #607d8b !important;
+            width: auto !important;
+            padding: 10px 20px !important;
+            font-size: 16px !important;
+            margin: 0 !important;
+        }
+        
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
     </style>
 <base target="_blank">
@@ -495,7 +610,12 @@
 
     <!-- شاشة اللعبة -->
     <div id="game-screen" class="card hidden">
-        <div class="team-name" id="team-display"></div>
+        <div class="header-row">
+            <div class="team-name" id="team-display"></div>
+            <button onclick="toggleTheme()" class="theme-toggle">
+                🌓
+            </button>
+        </div>
 
         <!-- صندوق الوقت -->
         <div class="time-box">
@@ -514,6 +634,19 @@
         <!-- شريط التقدم -->
         <div class="progress-bar">
             <div class="progress-fill" id="progress-bar" style="width: 10%">1 / 10</div>
+        </div>
+
+        <!-- المؤشرات الجديدة -->
+        <div style="display: flex; justify-content: space-between; margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+            <div>
+                <span>💰 النقاط: <span id="points-display" style="font-weight: bold; color: #ffd700;">0</span></span>
+            </div>
+            <div>
+                <span>💡 مساعدات: <span id="hints-display" style="font-weight: bold; color: #ff9800;">0</span></span>
+            </div>
+            <div>
+                <span>⚡ القوة: <span id="power-display" style="font-weight: bold;">100%</span></span>
+            </div>
         </div>
 
         <!-- المرحلة 1: عرض الشفرة -->
@@ -566,7 +699,7 @@
                 </button>
             </div>
 
-            <!-- أزرار المساعدة الجديدة -->
+            <!-- أزرار المساعدة -->
             <div style="margin: 20px 0; padding: 20px; background: #f5f5f5; border-radius: 15px;">
                 <div style="font-weight: bold; color: #666; margin-bottom: 15px;">🆘 نظام المساعدة:</div>
                 <div class="help-buttons">
@@ -623,10 +756,10 @@
 
         <hr style="margin: 30px 0; border: none; border-top: 2px dashed #ddd;">
 
-        <!-- لوحة المتصدرين -->
+        <!-- لوحة المتصدرين (معدلة نهائياً بدون مشكلة الفهرس) -->
         <div class="leaderboard-section">
             <h3 class="leaderboard-title">🏆 ترتيب الفرق <span class="status-indicator"></span></h3>
-            <div id="leaderboard-status" class="leaderboard-loading">جاري تحميل البيانات...</div>
+            <div id="leaderboard-status" class="leaderboard-loading">🏃 جاري تحميل المتسابقين...</div>
             <table id="leaderboard-table" style="display: none;">
                 <thead>
                     <tr>
@@ -634,7 +767,7 @@
                         <th>القديس</th>
                         <th>التقدم</th>
                         <th>النقاط</th>
-                        <th>الوقت</th>
+                        <th>الحالة</th>
                     </tr>
                 </thead>
                 <tbody id="leaderboard-body"></tbody>
@@ -661,21 +794,30 @@
         </button>
     </div>
 
-    <!-- صوت النجاح -->
+    <!-- الأصوات -->
     <audio id="success-sound" preload="auto">
         <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
     </audio>
     <audio id="winner-sound" preload="auto">
         <source src="https://www.soundjay.com/misc/sounds/crowd-cheering-01.mp3" type="audio/mpeg">
     </audio>
+    <audio id="level-up-sound" preload="auto">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-08.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="hint-sound" preload="auto">
+        <source src="https://www.soundjay.com/button/button-09.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="error-sound" preload="auto">
+        <source src="https://www.soundjay.com/misc/sounds/buzzer-01.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        // ✅ Firebase Configuration (مصححة)
+        // ✅ Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyACJ9zKs8EiVCNN8CgOtCNknV1znLNjlY8",
             authDomain: "spiritualtreasurehunt-684b9.firebaseapp.com",
             projectId: "spiritualtreasurehunt-684b9",
-            storageBucket: "spiritualtreasurehunt-684b9.appspot.com", // تم التعديل
+            storageBucket: "spiritualtreasurehunt-684b9.appspot.com",
             messagingSenderId: "266754020181",
             appId: "1:266754020181:web:67750b2f5a670a601195dc"
         };
@@ -700,139 +842,23 @@
 
         // بيانات الأماكن والشفرات
         const allLocations = [
-            { 
-                id: "altar", 
-                name: "المذبح الرئيسي", 
-                icon: "⛪",
-                area: "church",
-                cipher: "FQYGFW",
-                solution: "ALTAR",
-                cipherType: 0,
-                difficulty: 3,
-                hint: "المكان المرتفع في الكنيسة حيث يقف الكاهن",
-                firstLetter: "A"
-            },
-            { 
-                id: "goal", 
-                name: "المرمى", 
-                icon: "⚽",
-                area: "field",
-                cipher: "07-15-01-12",
-                solution: "GOAL",
-                cipherType: 1,
-                difficulty: 4,
-                hint: "الشبكة التي يسجل فيها الهدف في الملعب",
-                firstLetter: "G"
-            },
-            { 
-                id: "fountain", 
-                name: "النافورة", 
-                icon: "⛲",
-                area: "garden",
-                cipher: "06-15-21-14-20-01-09-14",
-                solution: "FOUNTAIN",
-                cipherType: 1,
-                difficulty: 5,
-                hint: "المكان الذي ينبع منه الماء في الجنينة",
-                firstLetter: "F"
-            },
-            { 
-                id: "tables", 
-                name: "الترابيزات", 
-                icon: "🪑",
-                area: "tables",
-                cipher: "20-01-02-12-05-19",
-                solution: "TABLES",
-                cipherType: 1,
-                difficulty: 4,
-                hint: "مكان الجلوس والأكل",
-                firstLetter: "T"
-            },
-            { 
-                id: "pool", 
-                name: "المسبح", 
-                icon: "🏊",
-                area: "pool",
-                cipher: "16-15-15-12",
-                solution: "POOL",
-                cipherType: 1,
-                difficulty: 3,
-                hint: "مكان السباحة والماء الأزرق",
-                firstLetter: "P"
-            },
-            { 
-                id: "bell", 
-                name: "الجرس", 
-                icon: "🔔",
-                area: "church",
-                cipher: "02-05-12-12",
-                solution: "BELL",
-                cipherType: 1,
-                difficulty: 3,
-                hint: "الصوت الذي ينادي للصلاة في الكنيسة",
-                firstLetter: "B"
-            },
-            { 
-                id: "crossbar", 
-                name: "العارضة", 
-                icon: "⚽",
-                area: "field",
-                cipher: "03-18-15-19-19-02-01-18",
-                solution: "CROSSBAR",
-                cipherType: 1,
-                difficulty: 5,
-                hint: "الخط العريض فوق المرمى في الملعب",
-                firstLetter: "C"
-            },
-            { 
-                id: "gate", 
-                name: "البوابة", 
-                icon: "🚪",
-                area: "garden",
-                cipher: "07-01-20-05",
-                solution: "GATE",
-                cipherType: 1,
-                difficulty: 3,
-                hint: "مدخل الجنينة الرئيسي",
-                firstLetter: "G"
-            },
-            { 
-                id: "icons", 
-                name: "الأيقونات", 
-                icon: "🖼️",
-                area: "church",
-                cipher: "09-03-15-14-19",
-                solution: "ICONS",
-                cipherType: 1,
-                difficulty: 4,
-                hint: "الصور المقدسة على جدران الكنيسة",
-                firstLetter: "I"
-            },
-            { 
-                id: "sideline", 
-                name: "خط التماس", 
-                icon: "⚽",
-                area: "field",
-                cipher: "19-09-04-05-12-09-14-05",
-                solution: "SIDELINE",
-                cipherType: 1,
-                difficulty: 5,
-                hint: "الخط الأبيض على جانب الملعب",
-                firstLetter: "S"
-            }
+            { id: "altar", name: "المذبح الرئيسي", icon: "⛪", area: "church", cipher: "FQYGFW", solution: "ALTAR", cipherType: 0, difficulty: 3, hint: "المكان المرتفع في الكنيسة حيث يقف الكاهن", firstLetter: "A" },
+            { id: "goal", name: "المرمى", icon: "⚽", area: "field", cipher: "07-15-01-12", solution: "GOAL", cipherType: 1, difficulty: 4, hint: "الشبكة التي يسجل فيها الهدف في الملعب", firstLetter: "G" },
+            { id: "fountain", name: "النافورة", icon: "⛲", area: "garden", cipher: "06-15-21-14-20-01-09-14", solution: "FOUNTAIN", cipherType: 1, difficulty: 5, hint: "المكان الذي ينبع منه الماء في الجنينة", firstLetter: "F" },
+            { id: "tables", name: "الترابيزات", icon: "🪑", area: "tables", cipher: "20-01-02-12-05-19", solution: "TABLES", cipherType: 1, difficulty: 4, hint: "مكان الجلوس والأكل", firstLetter: "T" },
+            { id: "pool", name: "المسبح", icon: "🏊", area: "pool", cipher: "16-15-15-12", solution: "POOL", cipherType: 1, difficulty: 3, hint: "مكان السباحة والماء الأزرق", firstLetter: "P" },
+            { id: "bell", name: "الجرس", icon: "🔔", area: "church", cipher: "02-05-12-12", solution: "BELL", cipherType: 1, difficulty: 3, hint: "الصوت الذي ينادي للصلاة في الكنيسة", firstLetter: "B" },
+            { id: "crossbar", name: "العارضة", icon: "⚽", area: "field", cipher: "03-18-15-19-19-02-01-18", solution: "CROSSBAR", cipherType: 1, difficulty: 5, hint: "الخط العريض فوق المرمى في الملعب", firstLetter: "C" },
+            { id: "gate", name: "البوابة", icon: "🚪", area: "garden", cipher: "07-01-20-05", solution: "GATE", cipherType: 1, difficulty: 3, hint: "مدخل الجنينة الرئيسي", firstLetter: "G" },
+            { id: "icons", name: "الأيقونات", icon: "🖼️", area: "church", cipher: "09-03-15-14-19", solution: "ICONS", cipherType: 1, difficulty: 4, hint: "الصور المقدسة على جدران الكنيسة", firstLetter: "I" },
+            { id: "sideline", name: "خط التماس", icon: "⚽", area: "field", cipher: "19-09-04-05-12-09-14-05", solution: "SIDELINE", cipherType: 1, difficulty: 5, hint: "الخط الأبيض على جانب الملعب", firstLetter: "S" }
         ];
 
         // أكواد QR
         const qrCodes = {
-            "LOC-ALTAR": "altar",
-            "LOC-GOAL": "goal",
-            "LOC-FOUNTAIN": "fountain",
-            "LOC-TABLES": "tables",
-            "LOC-POOL": "pool",
-            "LOC-BELL": "bell",
-            "LOC-CROSSBAR": "crossbar",
-            "LOC-GATE": "gate",
-            "LOC-ICONS": "icons",
+            "LOC-ALTAR": "altar", "LOC-GOAL": "goal", "LOC-FOUNTAIN": "fountain",
+            "LOC-TABLES": "tables", "LOC-POOL": "pool", "LOC-BELL": "bell",
+            "LOC-CROSSBAR": "crossbar", "LOC-GATE": "gate", "LOC-ICONS": "icons",
             "LOC-SIDELINE": "sideline"
         };
 
@@ -849,8 +875,43 @@
         let leaderboardUnsubscribe = null;
         let firebaseConnected = false;
 
-        // ==================== نظام حفظ الوقت في LocalStorage ====================
-        
+        // ==================== تحسين الأداء (debounce) ====================
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // ==================== وضع النهار/الليل ====================
+        function toggleTheme() {
+            const body = document.getElementById('main-body');
+            body.classList.toggle('light-mode');
+            
+            const isLight = body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            
+            const themeBtn = document.querySelector('.theme-toggle');
+            if (themeBtn) {
+                themeBtn.innerHTML = isLight ? '🌞' : '🌓';
+            }
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.getElementById('main-body').classList.add('light-mode');
+                const themeBtn = document.querySelector('.theme-toggle');
+                if (themeBtn) themeBtn.innerHTML = '🌞';
+            }
+        }
+
+        // ==================== نظام حفظ الوقت (استئناف تلقائي) ====================
         function saveGameState() {
             if (!currentTeam || currentMission > 10) return;
             
@@ -880,16 +941,19 @@
         }
 
         window.addEventListener('load', function() {
+            loadTheme();
+            
             const savedState = loadGameState();
+            
             if (savedState && savedState.team && savedState.mission <= 10) {
                 const timeDiff = new Date() - new Date(savedState.timestamp);
+                
                 if (timeDiff < 24 * 60 * 60 * 1000) {
-                    const restore = confirm(`يوجد لعبة سابقة لفريق ${savedState.team.replace(/_/g, ' ')} متوقفة عند اللغز ${savedState.mission}\nهل تريد استكمال اللعبة؟`);
-                    if (restore) {
+                    console.log(`🔄 استئناف تلقائي: ${savedState.team} - المستوى ${savedState.mission}`);
+                    
+                    setTimeout(() => {
                         restoreGame(savedState);
-                    } else {
-                        clearGameState();
-                    }
+                    }, 500);
                 } else {
                     clearGameState();
                 }
@@ -922,7 +986,9 @@
             document.getElementById('team-display').innerText = "فريق: " + currentTeam.replace(/_/g, ' ');
             
             startTimer();
-            updateLastAction('استئناف اللعبة');
+            updateLastAction('استئناف تلقائي');
+            
+            await checkFirebaseConnection();
             showCipherPhase();
             loadLeaderboard();
         }
@@ -930,14 +996,10 @@
         window.addEventListener('beforeunload', function(e) {
             if (currentTeam && currentMission <= 10) {
                 saveGameState();
-                e.preventDefault();
-                e.returnValue = "هل تريد حقاً مغادرة اللعبة؟";
-                return "هل تريد حقاً مغادرة اللعبة؟";
             }
         });
 
         // ==================== فحص اتصال Firebase ====================
-        
         async function checkFirebaseConnection() {
             try {
                 const testDoc = await db.collection('teams').doc('_connection_test_').get();
@@ -948,34 +1010,19 @@
                 console.error('❌ Firebase connection failed:', error);
                 firebaseConnected = false;
                 
-                let errorMsg = '⚠️ مشكلة في الاتصال بقاعدة البيانات!\n\n';
-                if (error.code === 'permission-denied') {
-                    errorMsg += 'السبب: Security Rules مغلقة\n\n';
-                    errorMsg += 'الحل: افتح Firebase Console > Firestore Database > Rules\n';
-                    errorMsg += 'واستبدل القواعد بـ:\n\n';
-                    errorMsg += 'rules_version = "2";\n';
-                    errorMsg += 'service cloud.firestore {\n';
-                    errorMsg += '  match /databases/{database}/documents {\n';
-                    errorMsg += '    match /{document=**} {\n';
-                    errorMsg += '      allow read, write: if true;\n';
-                    errorMsg += '    }\n';
-                    errorMsg += '  }\n';
-                    errorMsg += '}';
-                } else {
-                    errorMsg += 'تأكد من:\n1. اتصال الإنترنت\n2. Firebase Config صحيح';
-                }
+                let errorMsg = '⚠️ مشكلة في الاتصال بقاعدة البيانات!';
                 
                 const statusDiv = document.getElementById('leaderboard-status');
                 if (statusDiv) {
                     statusDiv.className = 'leaderboard-error';
-                    statusDiv.innerHTML = errorMsg.replace(/\n/g, '<br>');
+                    statusDiv.innerHTML = errorMsg;
                 }
                 
                 return false;
             }
         }
 
-        // ==================== باقي الدوال ====================
+        // ==================== دوال اللعبة الأساسية ====================
 
         function shuffleForTeam(teamName) {
             let shuffled = [...allLocations];
@@ -988,27 +1035,45 @@
         }
 
         async function startApp() {
-            currentTeam = document.getElementById('team-select').value;
-            if (!currentTeam) {
+            const selectedTeam = document.getElementById('team-select').value;
+            if (!selectedTeam) {
                 alert("⚠️ اختر قديسك أولاً!");
                 return;
             }
 
-            teamMissions = shuffleForTeam(currentTeam);
+            const savedState = loadGameState();
+            
+            if (savedState && savedState.team === selectedTeam && savedState.mission <= 10) {
+                console.log(`🔄 استئناف تلقائي للفريق ${selectedTeam}`);
+                await restoreGame(savedState);
+            } else {
+                console.log(`🆕 بدء لعبة جديدة للفريق ${selectedTeam}`);
+                await startNewGame(selectedTeam);
+            }
+        }
+
+        async function startNewGame(team) {
+            currentTeam = team;
+            currentMission = 1;
+            totalPoints = 0;
+            hintsUsed = 0;
+            isVerified = false;
             startTime = new Date();
             lastActionTime = startTime;
-
+            
+            teamMissions = shuffleForTeam(currentTeam);
+            
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             document.getElementById('team-display').innerText = "فريق: " + currentTeam.replace(/_/g, ' ');
-
-            startTimer();
-
-            await checkFirebaseConnection();
             
+            startTimer();
+            await checkFirebaseConnection();
             await loadProgress();
-            loadLeaderboard();
             showCipherPhase();
+            loadLeaderboard();
+            
+            saveGameState();
         }
 
         function startTimer() {
@@ -1097,8 +1162,25 @@
             updateUI();
         }
 
+        function playSound(type) {
+            const sounds = {
+                success: document.getElementById('success-sound'),
+                winner: document.getElementById('winner-sound'),
+                levelUp: document.getElementById('level-up-sound'),
+                hint: document.getElementById('hint-sound'),
+                error: document.getElementById('error-sound')
+            };
+            
+            if (sounds[type]) {
+                sounds[type].volume = 0.3;
+                sounds[type].play().catch(() => {});
+            }
+        }
+
         async function showHelp(level) {
             if (currentMission > 10) return;
+            
+            playSound('hint');
             
             const currentLoc = teamMissions[currentMission - 1];
             let pointsDeduction = 0;
@@ -1159,6 +1241,7 @@
             
             updateLastAction(`مساعدة مستوى ${level} (-${pointsDeduction} نقطة)`);
             saveGameState();
+            updateUI();
             
             document.getElementById(boxId).scrollIntoView({ behavior: 'smooth' });
         }
@@ -1171,6 +1254,8 @@
             const msgBox = document.getElementById('verify-message');
             
             if (input === correctSolution) {
+                playSound('success');
+                
                 isVerified = true;
                 
                 msgBox.className = 'verify-message success';
@@ -1194,12 +1279,9 @@
                 document.getElementById('step-1').classList.add('completed');
                 document.getElementById('step-2').classList.add('active');
                 
-                const successSound = document.getElementById('success-sound');
-                successSound.volume = 0.3;
-                successSound.play().catch(() => {});
-                
                 updateLastAction('فك الشفرة');
                 saveGameState();
+                updateUI();
                 
                 if (firebaseConnected) {
                     const solveTime = new Date();
@@ -1212,6 +1294,8 @@
                 document.getElementById('location-reveal').scrollIntoView({ behavior: 'smooth' });
                 
             } else {
+                playSound('error');
+                
                 msgBox.className = 'verify-message error';
                 
                 let hint = '';
@@ -1266,6 +1350,13 @@
             const progress = ((currentMission - 1) / 10) * 100;
             document.getElementById('progress-bar').style.width = progress + '%';
             document.getElementById('progress-bar').innerText = Math.min(currentMission, 10) + ' / 10';
+            
+            document.getElementById('points-display').innerText = totalPoints;
+            document.getElementById('hints-display').innerText = hintsUsed;
+            
+            const power = Math.max(0, 100 - (hintsUsed * 10));
+            document.getElementById('power-display').innerText = power + '%';
+            document.getElementById('power-display').style.color = power > 50 ? '#4caf50' : '#f44336';
 
             if (currentMission > 10) {
                 showWinnerScreen();
@@ -1285,6 +1376,7 @@
         }
 
         async function showWinnerScreen() {
+            playSound('winner');
             clearInterval(timerInterval);
             
             const endTime = new Date();
@@ -1314,10 +1406,6 @@
                 }
             }
 
-            const winnerSound = document.getElementById('winner-sound');
-            winnerSound.volume = 0.5;
-            winnerSound.play().catch(() => {});
-
             createConfetti();
             clearGameState();
         }
@@ -1337,7 +1425,7 @@
             }
         }
 
-        // ==================== لوحة المتصدرين المعدلة (تم إصلاح مشكلة الفهرس) ====================
+        // ==================== لوحة المتصدرين (بدون أي مشكلة فهرس) ====================
         function loadLeaderboard() {
             if (leaderboardUnsubscribe) {
                 leaderboardUnsubscribe();
@@ -1345,6 +1433,7 @@
             
             const statusDiv = document.getElementById('leaderboard-status');
             const tableDiv = document.getElementById('leaderboard-table');
+            const tbody = document.getElementById('leaderboard-body');
             
             if (!firebaseConnected) {
                 statusDiv.className = 'leaderboard-error';
@@ -1354,64 +1443,71 @@
             }
             
             statusDiv.className = 'leaderboard-loading';
-            statusDiv.innerText = 'جاري تحميل البيانات...';
+            statusDiv.innerHTML = '🏃 جاري تحميل المتسابقين...';
             tableDiv.style.display = 'none';
             
-            // استعلام مبسط لتجنب مشكلة الفهرس
-            leaderboardUnsubscribe = db.collection('teams')
-                .orderBy('totalPoints', 'desc')
-                .orderBy('__name__', 'desc')
-                .onSnapshot(snap => {
-                    const tbody = document.getElementById('leaderboard-body');
-                    if (!tbody) return;
-                    
-                    let html = "";
-                    let rank = 1;
-                    
-                    if (snap.empty) {
-                        statusDiv.innerText = 'لا توجد بيانات';
-                        return;
-                    }
-                    
-                    snap.forEach(doc => {
-                        if (doc.id.startsWith('_')) return;
-                        
-                        const data = doc.data();
-                        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
-                        const teamName = doc.id.replace(/_/g, ' ');
-                        const currentMissionNum = data.currentMission > 10 ? '✅' : (data.currentMission || 1);
-                        
-                        html += `<tr>
-                            <td style="font-size: 20px;">${medal}</td>
-                            <td><strong>${teamName}</strong></td>
-                            <td>${currentMissionNum}/10</td>
-                            <td style="color: ${(data.totalPoints||0) < 0 ? '#f44336' : '#4caf50'}; font-weight: bold;">${data.totalPoints || 0}</td>
-                            <td>--:--</td>
-                        </tr>`;
-                        rank++;
+            // ✅ أبسط استعلام - بدون ترتيب معقد، نجيب كل الفرق
+            db.collection('teams').get().then(snapshot => {
+                let html = "";
+                let teams = [];
+                
+                snapshot.forEach(doc => {
+                    if (doc.id.startsWith('_')) return;
+                    teams.push({ 
+                        id: doc.id, 
+                        ...doc.data() 
                     });
-                    
-                    tbody.innerHTML = html;
-                    statusDiv.style.display = 'none';
-                    tableDiv.style.display = 'table';
-                    
-                }, error => {
-                    console.error("Leaderboard error:", error);
-                    
-                    // عرض رسالة مفيدة للمستخدم
-                    if (error.code === 'failed-precondition' && error.message.includes('index')) {
-                        statusDiv.className = 'leaderboard-error';
-                        statusDiv.innerHTML = '⚠️ الفهرس غير موجود<br><small>اتبع الرابط لإنشاء الفهرس:</small><br>' +
-                            '<a href="https://console.firebase.google.com/v1/r/project/spiritualtreasurehunt-684b9/firestore/indexes?create_composite=Cllwcm9qZWN0cy9zcGlyaXR1YWx0cmVhc3VyZWh1bnQtNjg0YjkvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL3RlYW1zL2luZGV4ZXMvXxABGg0KCWNvbXBsZXRlZBACGg8KC3RvdGFsUG9pbnRzEAIaDAoIX19uYW1lX18QAg" target="_blank" style="color: #ffd700;">🔗 اضغط هنا لإنشاء الفهرس</a>';
-                    } else {
-                        statusDiv.className = 'leaderboard-error';
-                        statusDiv.innerHTML = '⚠️ خطأ في التحميل: ' + error.message;
-                    }
-                    tableDiv.style.display = 'none';
                 });
+                
+                // ترتيب يدوي في الذاكرة (أسرع وأسهل)
+                teams.sort((a, b) => {
+                    // الأولوية للفرق المكتملة
+                    if (a.completed && !b.completed) return -1;
+                    if (!a.completed && b.completed) return 1;
+                    
+                    // ثم حسب النقاط (الأعلى أولاً)
+                    return (b.totalPoints || 0) - (a.totalPoints || 0);
+                });
+                
+                if (teams.length === 0) {
+                    statusDiv.innerHTML = '🏁 لا يوجد فرق بعد... ابدأ أنت أولاً!';
+                    return;
+                }
+                
+                teams.forEach((data, index) => {
+                    const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                    const teamName = data.id.replace(/_/g, ' ');
+                    const currentMissionNum = data.currentMission > 10 ? '✅' : (data.currentMission || 1);
+                    
+                    // تمييز الفريق الحالي
+                    const isCurrentTeam = data.id === currentTeam ? 'style="background: #fff9c4;"' : '';
+                    
+                    html += `<tr ${isCurrentTeam}>
+                        <td style="font-size: 24px;">${medal}</td>
+                        <td><strong>${teamName}</strong> ${data.id === currentTeam ? '⭐' : ''}</td>
+                        <td>${currentMissionNum}/10</td>
+                        <td style="color: ${(data.totalPoints||0) < 0 ? '#f44336' : '#4caf50'}; font-weight: bold;">${data.totalPoints || 0}</td>
+                        <td>${data.completed ? '🏆' : '⏳'}</td>
+                    </tr>`;
+                });
+                
+                tbody.innerHTML = html;
+                statusDiv.style.display = 'none';
+                tableDiv.style.display = 'table';
+                
+                // إضافة تأثير بسيط
+                tableDiv.classList.add('success-flash');
+                setTimeout(() => tableDiv.classList.remove('success-flash'), 500);
+                
+            }).catch(error => {
+                console.error("Leaderboard error:", error);
+                statusDiv.className = 'leaderboard-error';
+                statusDiv.innerHTML = '⚠️ خطأ في التحميل. تأكد من اتصال Firebase.';
+                tableDiv.style.display = 'none';
+            });
         }
 
-        // تشغيل الماسح
+        // ==================== تشغيل الماسح ====================
         function startScanner() {
             if (html5QrCode) {
                 html5QrCode.clear();
@@ -1447,13 +1543,11 @@
             const scannedLocation = qrCodes[scanned];
             
             if (scanned === expectedQR || scannedLocation === targetLocationId) {
+                playSound('levelUp');
+                
                 document.getElementById('main-body').classList.add('success-flash');
                 document.getElementById('scan-feedback').innerHTML = 
                     "<span style='color: #2e7d32;'>✅ كود صحيح! تم التحقق من المكان</span>";
-                
-                const successSound = document.getElementById('success-sound');
-                successSound.volume = 0.3;
-                successSound.play().catch(() => {});
 
                 if (firebaseConnected) {
                     const scanTime = new Date();
@@ -1519,6 +1613,15 @@
                 updateUI();
             }
         }
+
+        // تحميل غير متزامن للماسح (تحسين الأداء)
+        setTimeout(() => {
+            if (typeof Html5Qrcode === 'undefined') {
+                const scannerScript = document.createElement('script');
+                scannerScript.src = 'https://unpkg.com/html5-qrcode';
+                document.body.appendChild(scannerScript);
+            }
+        }, 2000);
     </script>
 </body>
 </html>
