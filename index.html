@@ -457,7 +457,23 @@
             margin-bottom: 15px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
+        
+        /* إضافة جديدة: رسالة خطأ لوحة المتصدرين */
+        .leaderboard-error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 2px solid #f44336;
+        }
+        .leaderboard-loading {
+            color: #666;
+            padding: 20px;
+            font-style: italic;
+        }
     </style>
+<base target="_blank">
 </head>
 <body id="main-body">
 
@@ -614,7 +630,8 @@
         <!-- لوحة المتصدرين -->
         <div class="leaderboard-section">
             <h3 class="leaderboard-title">🏆 ترتيب الفرق <span class="status-indicator"></span></h3>
-            <table>
+            <div id="leaderboard-status" class="leaderboard-loading">جاري تحميل البيانات...</div>
+            <table id="leaderboard-table" style="display: none;">
                 <thead>
                     <tr>
                         <th>الترتيب</th>
@@ -659,12 +676,13 @@
     <script>
         // Firebase Configuration
         const firebaseConfig = {
-            aapiKey: "AIzaSyACJ9zKs8EiVCNN8CgOtCNknV1znLNjlY8",
+            apiKey: "AIzaSyACJ9zKs8EiVCNN8CgOtCNknV1znLNjlY8",
             authDomain: "spiritualtreasurehunt-684b9.firebaseapp.com",
-            projectId: "spiritualtreasurehunt-684b9",
+            projectId: "spiritualtreasurehunt-684b9", 
             storageBucket: "spiritualtreasurehunt-684b9.firebasestorage.app",
             messagingSenderId: "266754020181",
             appId: "1:266754020181:web:67750b2f5a670a601195dc"
+        };
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
@@ -833,6 +851,7 @@
         let timerInterval = null;
         let lastActionTime = null;
         let leaderboardUnsubscribe = null;
+        let firebaseConnected = false;
 
         // ==================== نظام حفظ الوقت في LocalStorage ====================
         
@@ -928,6 +947,47 @@
             }
         });
 
+        // ==================== فحص اتصال Firebase ====================
+        
+        async function checkFirebaseConnection() {
+            try {
+                // محاولة قراءة من قاعدة البيانات
+                const testDoc = await db.collection('teams').doc('_connection_test_').get();
+                console.log('✅ Firebase connection: OK');
+                firebaseConnected = true;
+                return true;
+            } catch (error) {
+                console.error('❌ Firebase connection failed:', error);
+                firebaseConnected = false;
+                
+                let errorMsg = '⚠️ مشكلة في الاتصال بقاعدة البيانات!\n\n';
+                if (error.code === 'permission-denied') {
+                    errorMsg += 'السبب: Security Rules مغلقة\n\n';
+                    errorMsg += 'الحل: افتح Firebase Console > Firestore Database > Rules\n';
+                    errorMsg += 'واستبدل القواعد بـ:\n\n';
+                    errorMsg += 'rules_version = "2";\n';
+                    errorMsg += 'service cloud.firestore {\n';
+                    errorMsg += '  match /databases/{database}/documents {\n';
+                    errorMsg += '    match /{document=**} {\n';
+                    errorMsg += '      allow read, write: if true;\n';
+                    errorMsg += '    }\n';
+                    errorMsg += '  }\n';
+                    errorMsg += '}';
+                } else {
+                    errorMsg += 'تأكد من:\n1. اتصال الإنترنت\n2. Firebase Config صحيح';
+                }
+                
+                // عرض رسالة في لوحة المتصدرين
+                const statusDiv = document.getElementById('leaderboard-status');
+                if (statusDiv) {
+                    statusDiv.className = 'leaderboard-error';
+                    statusDiv.innerHTML = errorMsg.replace(/\n/g, '<br>');
+                }
+                
+                return false;
+            }
+        }
+
         // ==================== باقي الدوال ====================
 
         // توليد ترتيب عشوائي ثابت للفريق
@@ -960,6 +1020,9 @@
             // بدء المؤقت
             startTimer();
 
+            // فحص الاتصال بـ Firebase أولاً
+            await checkFirebaseConnection();
+            
             await loadProgress();
             loadLeaderboard();
             showCipherPhase();
@@ -985,10 +1048,12 @@
             document.getElementById('last-action').innerText = `آخر نشاط: ${action} (${timeStr})`;
             
             // حفظ في Firebase
-            db.collection('teams').doc(currentTeam).update({
-                lastAction: action,
-                lastActionTime: firebase.firestore.FieldValue.serverTimestamp()
-            }).catch(() => {});
+            if (firebaseConnected) {
+                db.collection('teams').doc(currentTeam).update({
+                    lastAction: action,
+                    lastActionTime: firebase.firestore.FieldValue.serverTimestamp()
+                }).catch(() => {});
+            }
             
             // حفظ في LocalStorage
             saveGameState();
@@ -1112,15 +1177,17 @@
             document.getElementById(boxId).style.display = 'block';
             
             // حفظ في Firebase
-            try {
-                await db.collection('teams').doc(currentTeam).update({
-                    totalPoints: totalPoints,
-                    hintsUsed: hintsUsed,
-                    lastAction: `استخدام مساعدة مستوى ${level}`,
-                    lastActionTime: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch (error) {
-                console.error("Help update error:", error);
+            if (firebaseConnected) {
+                try {
+                    await db.collection('teams').doc(currentTeam).update({
+                        totalPoints: totalPoints,
+                        hintsUsed: hintsUsed,
+                        lastAction: `استخدام مساعدة مستوى ${level}`,
+                        lastActionTime: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch (error) {
+                    console.error("Help update error:", error);
+                }
             }
             
             updateLastAction(`مساعدة مستوى ${level} (-${pointsDeduction} نقطة)`);
@@ -1176,11 +1243,13 @@
                 saveGameState();
                 
                 // حفظ وقت فك الشفرة
-                const solveTime = new Date();
-                await db.collection('teams').doc(currentTeam).collection('missions').doc(currentMission.toString()).set({
-                    cipherSolvedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    solveTime: solveTime
-                }).catch(() => {});
+                if (firebaseConnected) {
+                    const solveTime = new Date();
+                    await db.collection('teams').doc(currentTeam).collection('missions').doc(currentMission.toString()).set({
+                        cipherSolvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        solveTime: solveTime
+                    }).catch(() => {});
+                }
                 
                 // تمرير للمكان
                 document.getElementById('location-reveal').scrollIntoView({ behavior: 'smooth' });
@@ -1284,16 +1353,18 @@
             document.getElementById('final-time').innerText = timeString;
 
             // حفظ النتيجة النهائية
-            try {
-                await db.collection('teams').doc(currentTeam).update({
-                    currentMission: 11,
-                    totalPoints: totalPoints,
-                    endTime: firebase.firestore.FieldValue.serverTimestamp(),
-                    totalTimeSeconds: totalTime,
-                    completed: true
-                });
-            } catch (error) {
-                console.error("Final update error:", error);
+            if (firebaseConnected) {
+                try {
+                    await db.collection('teams').doc(currentTeam).update({
+                        currentMission: 11,
+                        totalPoints: totalPoints,
+                        endTime: firebase.firestore.FieldValue.serverTimestamp(),
+                        totalTimeSeconds: totalTime,
+                        completed: true
+                    });
+                } catch (error) {
+                    console.error("Final update error:", error);
+                }
             }
 
             const winnerSound = document.getElementById('winner-sound');
@@ -1320,12 +1391,27 @@
             }
         }
 
-        // لوحة المتصدرين - إصلاح النسخة
+        // ==================== لوحة المتصدرين المعدلة ====================
         function loadLeaderboard() {
             // إلغاء الاشتراك السابق إذا وجد
             if (leaderboardUnsubscribe) {
                 leaderboardUnsubscribe();
             }
+            
+            const statusDiv = document.getElementById('leaderboard-status');
+            const tableDiv = document.getElementById('leaderboard-table');
+            
+            // التحقق من الاتصال أولاً
+            if (!firebaseConnected) {
+                statusDiv.className = 'leaderboard-error';
+                statusDiv.innerHTML = '⚠️ غير متصل بقاعدة البيانات<br><small>تأكد من إعدادات Firebase</small>';
+                tableDiv.style.display = 'none';
+                return;
+            }
+            
+            statusDiv.className = 'leaderboard-loading';
+            statusDiv.innerText = 'جاري تحميل البيانات...';
+            tableDiv.style.display = 'none';
             
             // الاشتراك في تحديثات الفرق
             leaderboardUnsubscribe = db.collection('teams')
@@ -1338,7 +1424,17 @@
                     let html = "";
                     let rank = 1;
                     
+                    if (snap.empty) {
+                        statusDiv.className = 'leaderboard-loading';
+                        statusDiv.innerText = 'لا توجد بيانات حالياً';
+                        tableDiv.style.display = 'none';
+                        return;
+                    }
+                    
                     snap.forEach(doc => {
+                        // تخطي مستندات الاختبار
+                        if (doc.id.startsWith('_')) return;
+                        
                         const data = doc.data();
                         const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
                         const teamName = doc.id.replace(/_/g, ' ');
@@ -1370,43 +1466,32 @@
                     });
                     
                     tbody.innerHTML = html;
-               }, error => {
-    console.error("Leaderboard error:", error);
-    const tbody = document.getElementById('leaderboard-body');
-    if (tbody) {
-        tbody.innerHTML = '<tr><td colspan="5" style="color: #f44336;">⚠️ خطأ في الاتصال بقاعدة البيانات<br><small style="color:#666">تأكد من اتصال الإنترنت وإعدادات Firebase</small></td></tr>';
-    }
-    
-    // محاولة إعادة الاتصال بعد 5 ثواني
-    setTimeout(() => {
-        console.log("Retrying leaderboard connection...");
-        loadLeaderboard();
-    }, 5000);
-});
+                    statusDiv.style.display = 'none';
+                    tableDiv.style.display = 'table';
+                    
+                }, error => {
+                    console.error("Leaderboard error:", error);
+                    const tbody = document.getElementById('leaderboard-body');
+                    
+                    let errorMsg = '⚠️ خطأ في تحميل البيانات';
+                    if (error.code === 'permission-denied') {
+                        errorMsg = '⚠️ خطأ في الصلاحيات<br><small>Security Rules مغلقة - افتح Firebase Console</small>';
+                    } else if (error.code === 'unauthenticated') {
+                        errorMsg = '⚠️ يجب تسجيل الدخول';
+                    }
+                    
+                    statusDiv.className = 'leaderboard-error';
+                    statusDiv.innerHTML = errorMsg;
+                    tableDiv.style.display = 'none';
+                    
+                    // محاولة إعادة الاتصال بعد 5 ثواني
+                    setTimeout(() => {
+                        console.log("Retrying leaderboard connection...");
+                        loadLeaderboard();
+                    }, 5000);
+                });
         }
-// فحص حالة Firebase
-function checkFirebaseConnection() {
-    try {
-        // محاولة كتابة بيانات اختبار
-        db.collection('teams').doc('_test_').set({
-            test: true,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
-            console.log('✅ Firebase connection: OK');
-            // حذف بيانات الاختبار
-            db.collection('teams').doc('_test_').delete();
-        }).catch(err => {
-            console.error('❌ Firebase connection failed:', err);
-            alert('⚠️ مشكلة في الاتصال بقاعدة البيانات!\n\nتأكد من:\n1. اتصال الإنترنت\n2. Firebase Config صحيح\n3. Security Rules مفتوحة');
-        });
-    } catch(e) {
-        console.error('Firebase not initialized:', e);
-    }
-}
 
-// استدعاء الفحص عند بدء اللعبة
-// أضف هذا السطر في دالة startApp() بعد السطر 380 تقريباً:
-// checkFirebaseConnection();
         // تشغيل الماسح
         function startScanner() {
             if (html5QrCode) {
@@ -1454,12 +1539,14 @@ function checkFirebaseConnection() {
                 successSound.play().catch(() => {});
 
                 // حفظ وقت إكمال اللغز
-                const scanTime = new Date();
-                await db.collection('teams').doc(currentTeam).collection('missions').doc(currentMission.toString()).update({
-                    locationFoundAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    scanTime: scanTime,
-                    pointsEarned: 10
-                }).catch(() => {});
+                if (firebaseConnected) {
+                    const scanTime = new Date();
+                    await db.collection('teams').doc(currentTeam).collection('missions').doc(currentMission.toString()).update({
+                        locationFoundAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        scanTime: scanTime,
+                        pointsEarned: 10
+                    }).catch(() => {});
+                }
 
                 updateLastAction('إكمال اللغز (+10 نقاط)');
                 saveGameState();
@@ -1495,15 +1582,17 @@ function checkFirebaseConnection() {
             currentMission++;
             totalPoints += 10;
 
-            try {
-                await db.collection('teams').doc(currentTeam).update({
-                    currentMission: currentMission,
-                    totalPoints: totalPoints,
-                    lastAction: `إكمال اللغز ${currentMission - 1}`,
-                    lastActionTime: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch (error) {
-                console.error("Update error:", error);
+            if (firebaseConnected) {
+                try {
+                    await db.collection('teams').doc(currentTeam).update({
+                        currentMission: currentMission,
+                        totalPoints: totalPoints,
+                        lastAction: `إكمال اللغز ${currentMission - 1}`,
+                        lastActionTime: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch (error) {
+                    console.error("Update error:", error);
+                }
             }
 
             if (currentMission <= 10) {
