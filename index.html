@@ -806,7 +806,7 @@
         const db = firebase.firestore();
 
         // ==================== وضع التطوير ====================
-        const DEV_MODE = fasle; // غيرها لـ false في الموقع الرسمي
+        const DEV_MODE = false; // غيرها لـ false في الموقع الرسمي
         if (DEV_MODE) {
             clearGameState();
             console.log("🧪 DEV_MODE نشط: تم مسح الألعاب السابقة");
