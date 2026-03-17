@@ -610,15 +610,15 @@
         <h1>🧭 صيد الكنز الرقمي</h1>
         <p class="subtitle">مسابقة جماعية لحل الشفرات المقدسة</p>
         <div class="paper-icon">📜🔐📜</div>
-       <select id="team-select">
-    <option value="">-- اختر القديس --</option>
-    <option value="مارمينا"> القديس مارمينا</option>
-    <option value="مارجرجس"> القديس مارجرجس</option>
-    <option value="مارمرقس"> القديس مارمرقس</option>
-    <option value="الأنبا_كاراس"> الأنبا كاراس</option>
-    <option value="الأنبا_بيشوي"> الأنبا بيشوي</option>
-    <option value="الأنبا_أنطونيوس"> الأنبا أنطونيوس</option>
-</select>
+        <select id="team-select">
+            <option value="">-- اختر القديس --</option>
+            <option value="مارمينا"> القديس مارمينا</option>
+            <option value="مارجرجس"> القديس مارجرجس</option>
+            <option value="مارمرقس"> القديس مارمرقس</option>
+            <option value="الأنبا_كاراس"> الأنبا كاراس</option>
+            <option value="الأنبا_بيشوي"> الأنبا بيشوي</option>
+            <option value="الأنبا_أنطونيوس"> الأنبا أنطونيوس</option>
+        </select>
         <button onclick="startApp()">🚀 بدء المغامرة</button>
         <p style="font-size: 12px; color: #999; margin-top: 20px;">
             💡 كل لغز في مكان مختلف! اقرأ ورقة المفاتيح جيداً
@@ -657,7 +657,7 @@
 
         <!-- شريط التقدم -->
         <div class="progress-bar">
-            <div class="progress-fill" id="progress-bar" style="width: 10%">1 / 8</div>
+            <div class="progress-fill" id="progress-bar" style="width: 10%">1 / 10</div>
         </div>
 
         <!-- المؤشرات الجديدة -->
@@ -677,7 +677,7 @@
         <div id="cipher-phase">
             <div style="background: #fff3e0; padding: 15px; border-radius: 15px; margin-bottom: 20px; border-right: 5px solid #ff9800;">
                 <strong style="color: #e65100; font-size: 20px;">
-                    🔐 الشفرة رقم <span id="mission-number">1</span> من 8
+                    🔐 الشفرة رقم <span id="mission-number">1</span> من 10
                 </strong>
                 <span class="difficulty" id="difficulty-stars">⭐⭐⭐</span>
             </div>
@@ -856,7 +856,7 @@
             console.log("🧪 DEV_MODE نشط: تم مسح الألعاب السابقة");
         }
 
-        // أنواع الشفرات (5 متوسط + 3 خبير)
+        // أنواع الشفرات (متنوعة)
         const cipherTypes = [
             { name: "ROT13", level: "متوسط", instruction: "حرك كل حرف 13 خطوة (A↔N, B↔O, C↔P...)" },
             { name: "Atbash", level: "متوسط", instruction: "عكس الأبجدية (A↔Z, B↔Y, C↔X...)" },
@@ -877,7 +877,7 @@
             pool: { name: "حمام السباحة", class: "area-pool" }
         };
 
-        // بيانات الأماكن والشفرات (8 ألغاز فقط)
+        // بيانات الأماكن والشفرات (10 ألغاز كاملة)
         const allLocations = [
             { id: "altar", name: "المذبح الرئيسي", icon: "⛪", area: "church", cipher: "NYZNE", solution: "ALTAR", cipherType: 0, difficulty: 3, hint: "مكان مرتفع في الكنيسة حيث يقف الكاهن", firstLetter: "A" },
             { id: "goal", name: "المرمى", icon: "⚽", area: "field", cipher: "ZOO", solution: "GOAL", cipherType: 1, difficulty: 4, hint: "الشبكة التي يسجل فيها الهدف في الملعب", firstLetter: "G" },
@@ -886,14 +886,17 @@
             { id: "pool", name: "المسبح", icon: "🏊", area: "pool", cipher: "NEVZ", solution: "POOL", cipherType: 4, difficulty: 3, hint: "مكان السباحة والماء الأزرق", firstLetter: "P" },
             { id: "bell", name: "الجرس", icon: "🔔", area: "church", cipher: "HTUJX", solution: "BELL", cipherType: 5, difficulty: 5, hint: "الصوت الذي ينادي للصلاة في الكنيسة", firstLetter: "B" },
             { id: "crossbar", name: "العارضة", icon: "⚽", area: "field", cipher: "23-15-31-44-15", solution: "CROSSBAR", cipherType: 6, difficulty: 5, hint: "الخط العريض فوق المرمى في الملعب", firstLetter: "C" },
-            { id: "gate", name: "البوابة", icon: "🚪", area: "garden", cipher: "ZMLG", solution: "GATE", cipherType: 7, difficulty: 4, hint: "مدخل الجنينة الرئيسي", firstLetter: "G" }
+            { id: "gate", name: "البوابة", icon: "🚪", area: "garden", cipher: "ZMLG", solution: "GATE", cipherType: 7, difficulty: 4, hint: "مدخل الجنينة الرئيسي", firstLetter: "G" },
+            { id: "icons", name: "الأيقونات", icon: "🖼️", area: "church", cipher: "09-03-15-14-19", solution: "ICONS", cipherType: 3, difficulty: 4, hint: "الصور المقدسة على جدران الكنيسة", firstLetter: "I" },
+            { id: "sideline", name: "خط التماس", icon: "⚽", area: "field", cipher: "19-09-04-05-12-09-14-05", solution: "SIDELINE", cipherType: 3, difficulty: 5, hint: "الخط الأبيض على جانب الملعب", firstLetter: "S" }
         ];
 
         // أكواد QR
         const qrCodes = {
             "LOC-ALTAR": "altar", "LOC-GOAL": "goal", "LOC-FOUNTAIN": "fountain",
             "LOC-TABLES": "tables", "LOC-POOL": "pool", "LOC-BELL": "bell",
-            "LOC-CROSSBAR": "crossbar", "LOC-GATE": "gate"
+            "LOC-CROSSBAR": "crossbar", "LOC-GATE": "gate", "LOC-ICONS": "icons",
+            "LOC-SIDELINE": "sideline"
         };
 
         let currentTeam = "";
@@ -912,7 +915,7 @@
 
         // ==================== نظام حفظ الوقت (مبسط) ====================
         function saveGameState() {
-            if (!currentTeam || currentMission > 8) return;
+            if (!currentTeam || currentMission > 10) return;
             
             const state = {
                 team: currentTeam,
@@ -953,7 +956,7 @@
         });
 
         window.addEventListener('beforeunload', function(e) {
-            if (currentTeam && currentMission <= 8 && !DEV_MODE) {
+            if (currentTeam && currentMission <= 10 && !DEV_MODE) {
                 saveGameState(); // نحفظ فقط في الوضع العادي
             }
         });
@@ -1008,11 +1011,11 @@
                     hintsUsed = data.hintsUsed || 0;
                     
                     updateUI();
-                    showNotification("🔄 تم التحديث من Firebase", "success");
+                    alert("🔄 تم التحديث من Firebase");
                 }
             } catch (error) {
                 console.error("❌ فشل التحديث:", error);
-                showNotification("❌ فشل التحديث", "error");
+                alert("❌ فشل التحديث");
             }
         }
 
@@ -1222,15 +1225,8 @@
             }
         }
 
-        function showNotification(message, type = 'info', duration = 3000) {
-            // إشعار بسيط
-            console.log(`${type}: ${message}`);
-            
-            // ممكن نضيف إشعارات HTML بعدين
-        }
-
         async function showHelp(level) {
-            if (currentMission > 8) return;
+            if (currentMission > 10) return;
             
             playSound('hint');
             
@@ -1408,18 +1404,18 @@
         }
 
         function updateUI() {
-            const progress = ((currentMission - 1) / 8) * 100;
+            const progress = ((currentMission - 1) / 10) * 100;
             document.getElementById('progress-bar').style.width = progress + '%';
-            document.getElementById('progress-bar').innerText = Math.min(currentMission, 8) + ' / 8';
+            document.getElementById('progress-bar').innerText = Math.min(currentMission, 10) + ' / 10';
             
             document.getElementById('points-display').innerText = totalPoints;
             document.getElementById('hints-display').innerText = hintsUsed;
             
-            const power = Math.max(0, 100 - (hintsUsed * 12));
+            const power = Math.max(0, 100 - (hintsUsed * 10));
             document.getElementById('power-display').innerText = power + '%';
             document.getElementById('power-display').style.color = power > 50 ? '#4caf50' : '#f44336';
 
-            if (currentMission > 8) {
+            if (currentMission > 10) {
                 showWinnerScreen();
                 return;
             }
@@ -1456,7 +1452,7 @@
             if (firebaseConnected) {
                 try {
                     await db.collection('teams').doc(currentTeam).update({
-                        currentMission: 9,
+                        currentMission: 11,
                         totalPoints: totalPoints,
                         endTime: firebase.firestore.FieldValue.serverTimestamp(),
                         totalTimeSeconds: totalTime,
@@ -1535,14 +1531,14 @@
                     teams.forEach((data, index) => {
                         const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
                         const teamName = data.id.replace(/_/g, ' ');
-                        const currentMissionNum = data.currentMission > 8 ? '✅' : (data.currentMission || 1);
+                        const currentMissionNum = data.currentMission > 10 ? '✅' : (data.currentMission || 1);
                         
                         const isCurrentTeam = data.id === currentTeam ? 'style="background: #fff9c4;"' : '';
                         
                         html += `<tr ${isCurrentTeam}>
                             <td style="font-size: 24px;">${medal}</td>
                             <td><strong>${teamName}</strong> ${data.id === currentTeam ? '⭐' : ''}</td>
-                            <td>${currentMissionNum}/8</td>
+                            <td>${currentMissionNum}/10</td>
                             <td style="color: ${(data.totalPoints||0) < 0 ? '#f44336' : '#4caf50'}; font-weight: bold;">${data.totalPoints || 0}</td>
                             <td>${data.completed ? '🏆' : '⏳'}</td>
                         </tr>`;
@@ -1660,7 +1656,7 @@
                 }
             }
 
-            if (currentMission <= 8) {
+            if (currentMission <= 10) {
                 setTimeout(() => {
                     alert("🎉 ممتاز! +10 نقاط\n\nالشفرة الجديدة جاهزة!");
                     showCipherPhase();
