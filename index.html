@@ -1197,4 +1197,298 @@
                     hint = '<br>💡 راجع المفتاح في ورقتك وحاول مرة أخرى';
                 }
                 
-                msgBox.inner
+                msgBox.innerHTML = `❌ الحل غير صحيح!${hint}`;
+                
+                // إفراغ الحقل للمحاولة مرة أخرى
+                document.getElementById('solution-input').value = '';
+                document.getElementById('solution-input').focus();
+            }
+        }
+
+        // السماح بالضغط على Enter للتحقق
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('solution-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifySolution();
+                }
+            });
+        });
+
+        // بدء مرحلة المسح
+        function startScanPhase() {
+            if (!isVerified) {
+                alert('⚠️ يجب فك الشفرة أولاً!');
+                return;
+            }
+            
+            document.getElementById('cipher-phase').classList.add('hidden');
+            document.getElementById('scan-phase').classList.remove('hidden');
+            
+            document.getElementById('step-2').classList.remove('active');
+            document.getElementById('step-2').classList.add('completed');
+            document.getElementById('step-3').classList.add('active');
+            
+            const currentLoc = teamMissions[currentMission - 1];
+            document.getElementById('scan-target').innerText = currentLoc.name;
+            document.getElementById('scan-location-name').innerText = currentLoc.name;
+            
+            updateLastAction('الذهاب للمكان');
+            
+            startScanner();
+        }
+
+        // رجوع للشفرة
+        function backToCipher() {
+            showCipherPhase();
+        }
+
+        // تحديث الواجهة
+        function updateUI() {
+            const progress = ((currentMission - 1) / 10) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('progress-bar').innerText = Math.min(currentMission, 10) + ' / 10';
+
+            if (currentMission > 10) {
+                showWinnerScreen();
+                return;
+            }
+
+            const currentLoc = teamMissions[currentMission - 1];
+            document.getElementById('mission-number').innerText = currentMission;
+            document.getElementById('cipher-display').innerText = currentLoc.cipher;
+            
+            // تحديث نوع الشفرة
+            const cipherInfo = cipherTypes[currentLoc.cipherType];
+            document.getElementById('cipher-type').innerText = cipherInfo.name;
+            document.getElementById('cipher-instruction').innerHTML = cipherInfo.instruction;
+            
+            // تحديث النجوم
+            const stars = '⭐'.repeat(currentLoc.difficulty);
+            document.getElementById('difficulty-stars').innerText = stars;
+        }
+
+        // عرض شاشة الفوز
+        async function showWinnerScreen() {
+            clearInterval(timerInterval);
+            
+            const endTime = new Date();
+            const totalTime = Math.floor((endTime - startTime) / 1000);
+            const hours = Math.floor(totalTime / 3600).toString().padStart(2, '0');
+            const minutes = Math.floor((totalTime % 3600) / 60).toString().padStart(2, '0');
+            const seconds = (totalTime % 60).toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}:${seconds}`;
+            
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('winner-screen').classList.remove('hidden');
+            document.getElementById('winner-team').innerText = currentTeam.replace(/_/g, ' ');
+            document.getElementById('final-points').innerText = totalPoints;
+            document.getElementById('final-time').innerText = timeString;
+
+            // حفظ النتيجة النهائية
+            try {
+                await db.collection('teams').doc(currentTeam).update({
+                    currentMission: 11,
+                    totalPoints: totalPoints,
+                    endTime: firebase.firestore.FieldValue.serverTimestamp(),
+                    totalTimeSeconds: totalTime,
+                    completed: true
+                });
+            } catch (error) {
+                console.error("Final update error:", error);
+            }
+
+            const winnerSound = document.getElementById('winner-sound');
+            winnerSound.volume = 0.5;
+            winnerSound.play().catch(() => {});
+
+            createConfetti();
+            clearGameState();
+        }
+
+        // تأثير الكونفيتي
+        function createConfetti() {
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        // لوحة المتصدرين - إصلاح النسخة
+        function loadLeaderboard() {
+            // إلغاء الاشتراك السابق إذا وجد
+            if (leaderboardUnsubscribe) {
+                leaderboardUnsubscribe();
+            }
+            
+            // الاشتراك في تحديثات الفرق
+            leaderboardUnsubscribe = db.collection('teams')
+                .orderBy('completed', 'desc')
+                .orderBy('totalPoints', 'desc')
+                .onSnapshot(snap => {
+                    const tbody = document.getElementById('leaderboard-body');
+                    if (!tbody) return;
+                    
+                    let html = "";
+                    let rank = 1;
+                    
+                    snap.forEach(doc => {
+                        const data = doc.data();
+                        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+                        const teamName = doc.id.replace(/_/g, ' ');
+                        const currentMissionNum = data.currentMission > 10 ? '✅' : (data.currentMission || 1);
+                        
+                        // حساب الوقت
+                        let timeDisplay = '--:--:--';
+                        if (data.startTime && data.endTime) {
+                            const totalSeconds = data.totalTimeSeconds || Math.floor((data.endTime.toDate() - data.startTime.toDate()) / 1000);
+                            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+                            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+                            const s = (totalSeconds % 60).toString().padStart(2, '0');
+                            timeDisplay = `${h}:${m}:${s}`;
+                        } else if (data.lastActionTime) {
+                            timeDisplay = '⏳ جاري...';
+                        }
+                        
+                        const points = data.totalPoints || 0;
+                        const pointsColor = points < 0 ? '#f44336' : '#4caf50';
+                        
+                        html += `<tr>
+                            <td style="font-size: 20px;">${medal}</td>
+                            <td><strong>${teamName}</strong></td>
+                            <td>${currentMissionNum}/10</td>
+                            <td style="color: ${pointsColor}; font-weight: bold;">${points}</td>
+                            <td style="font-family: monospace; font-size: 14px;">${timeDisplay}</td>
+                        </tr>`;
+                        rank++;
+                    });
+                    
+                    tbody.innerHTML = html;
+                }, error => {
+                    console.error("Leaderboard error:", error);
+                    // في حالة خطأ Firebase، أظهر رسالة
+                    const tbody = document.getElementById('leaderboard-body');
+                    if (tbody) {
+                        tbody.innerHTML = '<tr><td colspan="5" style="color: #999;">جاري تحميل الترتيب...</td></tr>';
+                    }
+                });
+        }
+
+        // تشغيل الماسح
+        function startScanner() {
+            if (html5QrCode) {
+                html5QrCode.clear();
+            }
+
+            html5QrCode = new Html5Qrcode("reader");
+
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                { fps: 25, qrbox: { width: 280, height: 280 } }, 
+                (text) => {
+                    handleScan(text);
+                },
+                (error) => {}
+            ).catch(err => {
+                console.error("Scanner error:", err);
+                document.getElementById('scan-feedback').innerText = "⚠️ لا يمكن تشغيل الكاميرا. تأكد من إعطاء الإذن.";
+                document.getElementById('scan-feedback').style.color = "red";
+            });
+        }
+
+        // إعادة تشغيل الماسح
+        function restartScanner() {
+            document.getElementById('scan-feedback').innerText = "🔄 جاري إعادة تشغيل الكاميرا...";
+            document.getElementById('scan-feedback').style.color = "#666";
+            startScanner();
+        }
+
+        // معالجة المسح
+        async function handleScan(text) {
+            const scanned = text.trim().toUpperCase();
+            const targetLocationId = teamMissions[currentMission - 1].id;
+            const expectedQR = "LOC-" + targetLocationId.toUpperCase();
+
+            const scannedLocation = qrCodes[scanned];
+            
+            if (scanned === expectedQR || scannedLocation === targetLocationId) {
+                document.getElementById('main-body').classList.add('success-flash');
+                document.getElementById('scan-feedback').innerHTML = 
+                    "<span style='color: #2e7d32;'>✅ كود صحيح! تم التحقق من المكان</span>";
+                
+                const successSound = document.getElementById('success-sound');
+                successSound.volume = 0.3;
+                successSound.play().catch(() => {});
+
+                // حفظ وقت إكمال اللغز
+                const scanTime = new Date();
+                await db.collection('teams').doc(currentTeam).collection('missions').doc(currentMission.toString()).update({
+                    locationFoundAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    scanTime: scanTime,
+                    pointsEarned: 10
+                }).catch(() => {});
+
+                updateLastAction('إكمال اللغز (+10 نقاط)');
+                saveGameState();
+
+                html5QrCode.stop().then(() => {
+                    setTimeout(() => {
+                        document.getElementById('main-body').classList.remove('success-flash');
+                        handleSuccess();
+                    }, 1500);
+                });
+            } else if (scannedLocation) {
+                document.getElementById('scan-feedback').innerHTML = 
+                    "<span style='color: #f57c00;'>⚠️ هذا كود لمكان آخر! ابحث عن " + 
+                    teamMissions[currentMission - 1].name + "</span>";
+                setTimeout(() => {
+                    document.getElementById('scan-feedback').innerHTML = 
+                        '<span class="status-indicator"></span> وجه الكاميرا على كود QR في ' + 
+                        teamMissions[currentMission - 1].name;
+                }, 3000);
+            } else {
+                document.getElementById('scan-feedback').innerHTML = 
+                    "<span style='color: #d32f2f;'>❌ كود غير معروف!</span>";
+                setTimeout(() => {
+                    document.getElementById('scan-feedback').innerHTML = 
+                        '<span class="status-indicator"></span> وجه الكاميرا على كود QR في ' + 
+                        teamMissions[currentMission - 1].name;
+                }, 2000);
+            }
+        }
+
+        // معالجة النجاح
+        async function handleSuccess() {
+            currentMission++;
+            totalPoints += 10;
+
+            try {
+                await db.collection('teams').doc(currentTeam).update({
+                    currentMission: currentMission,
+                    totalPoints: totalPoints,
+                    lastAction: `إكمال اللغز ${currentMission - 1}`,
+                    lastActionTime: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Update error:", error);
+            }
+
+            if (currentMission <= 10) {
+                setTimeout(() => {
+                    alert("🎉 ممتاز! +10 نقاط\n\nالشفرة الجديدة جاهزة!");
+                    showCipherPhase();
+                }, 300);
+            } else {
+                updateUI();
+            }
+        }
+    </script>
+</body>
+</html>
