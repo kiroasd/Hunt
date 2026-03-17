@@ -469,246 +469,70 @@
             font-style: italic;
         }
         
-        /* ==================== تحسينات الجوال ==================== */
+        /* تحسينات الجوال */
         @media screen and (max-width: 480px) {
-            body {
-                padding: 5px;
-            }
-            
-            .card {
-                padding: 12px;
-                margin: 8px auto;
-                border-radius: 20px;
-            }
-            
-            h1 {
-                font-size: 22px;
-            }
-            
-            .team-name {
-                font-size: 18px;
-                padding: 10px;
-                margin-bottom: 10px;
-                width: 100%;
-            }
-            
-            .progress-bar {
-                height: 20px;
-                margin: 10px 0;
-            }
-            
-            .progress-fill {
-                font-size: 12px;
-            }
-            
-            .time-box {
-                padding: 10px;
-            }
-            
-            .time-display {
-                font-size: 20px;
-            }
-            
-            .last-action {
-                font-size: 12px;
-            }
-            
-            /* المؤشرات الثلاثة */
+            body { padding: 5px; }
+            .card { padding: 12px; margin: 8px auto; border-radius: 20px; }
+            h1 { font-size: 22px; }
+            .team-name { font-size: 18px; padding: 10px; margin-bottom: 10px; width: 100%; }
+            .progress-bar { height: 20px; margin: 10px 0; }
+            .progress-fill { font-size: 12px; }
+            .time-box { padding: 10px; }
+            .time-display { font-size: 20px; }
+            .last-action { font-size: 12px; }
             [style*="display: flex; justify-content: space-between; margin: 10px 0;"] {
-                flex-wrap: wrap !important;
-                gap: 5px !important;
-                padding: 8px !important;
+                flex-wrap: wrap !important; gap: 5px !important; padding: 8px !important;
             }
-            
             [style*="display: flex; justify-content: space-between; margin: 10px 0;"] > div {
-                flex: 1 1 auto !important;
-                min-width: 90px !important;
-                font-size: 13px !important;
-                text-align: center !important;
+                flex: 1 1 auto !important; min-width: 90px !important; font-size: 13px !important; text-align: center !important;
             }
-            
-            .step-indicator {
-                gap: 8px;
-                margin: 15px 0;
-            }
-            
-            .step {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-            
-            .step::after {
-                font-size: 10px;
-                bottom: -20px;
-            }
-            
-            .cipher-container {
-                padding: 15px;
-            }
-            
-            .cipher-text {
-                font-size: 22px;
-                padding: 12px;
-                letter-spacing: 2px;
-                word-break: break-all;
-            }
-            
-            .cipher-type {
-                font-size: 12px;
-                padding: 5px 15px;
-            }
-            
-            .cipher-instruction {
-                font-size: 14px;
-            }
-            
-            .verify-box {
-                padding: 15px;
-            }
-            
-            .verify-input {
-                font-size: 20px;
-                padding: 12px;
-            }
-            
-            button {
-                padding: 14px;
-                font-size: 16px;
-            }
-            
-            .help-buttons {
-                grid-template-columns: 1fr !important;
-                gap: 8px;
-            }
-            
-            .help-btn-1, .help-btn-2, .help-btn-3 {
-                padding: 12px !important;
-                font-size: 14px !important;
-            }
-            
-            .location-reveal {
-                padding: 20px;
-                font-size: 22px;
-            }
-            
-            .location-icon {
-                font-size: 40px;
-            }
-            
-            #location-name {
-                font-size: 24px !important;
-            }
-            
-            .scanner-box {
-                padding: 15px;
-            }
-            
-            #reader {
-                width: 100% !important;
-                max-width: 100% !important;
-            }
-            
-            .camera-controls {
-                flex-direction: column;
-                gap: 8px;
-            }
-            
-            .camera-controls button {
-                min-width: 100%;
-            }
-            
-            .leaderboard-section {
-                padding: 12px;
-                overflow-x: auto;
-            }
-            
-            table {
-                font-size: 14px;
-            }
-            
-            th, td {
-                padding: 10px 5px;
-            }
-            
-            td:first-child {
-                font-size: 18px !important;
-            }
-            
-            .hint-box {
-                padding: 12px;
-                font-size: 14px;
-            }
-            
-            .header-row {
-                flex-direction: column;
-                align-items: center;
-                gap: 8px;
-            }
-            
-            .winner-screen {
-                padding: 20px;
-            }
-            
-            .trophy {
-                font-size: 60px;
-            }
-            
-            #final-points {
-                font-size: 36px !important;
-            }
-            
-            #final-time {
-                font-size: 22px !important;
-            }
-            
-            .dev-controls {
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .dev-btn {
-                width: 100% !important;
-            }
+            .step-indicator { gap: 8px; margin: 15px 0; }
+            .step { width: 40px; height: 40px; font-size: 16px; }
+            .step::after { font-size: 10px; bottom: -20px; }
+            .cipher-container { padding: 15px; }
+            .cipher-text { font-size: 22px; padding: 12px; letter-spacing: 2px; word-break: break-all; }
+            .cipher-type { font-size: 12px; padding: 5px 15px; }
+            .cipher-instruction { font-size: 14px; }
+            .verify-box { padding: 15px; }
+            .verify-input { font-size: 20px; padding: 12px; }
+            button { padding: 14px; font-size: 16px; }
+            .help-buttons { grid-template-columns: 1fr !important; gap: 8px; }
+            .help-btn-1, .help-btn-2, .help-btn-3 { padding: 12px !important; font-size: 14px !important; }
+            .location-reveal { padding: 20px; font-size: 22px; }
+            .location-icon { font-size: 40px; }
+            #location-name { font-size: 24px !important; }
+            .scanner-box { padding: 15px; }
+            #reader { width: 100% !important; max-width: 100% !important; }
+            .camera-controls { flex-direction: column; gap: 8px; }
+            .camera-controls button { min-width: 100%; }
+            .leaderboard-section { padding: 12px; overflow-x: auto; }
+            table { font-size: 14px; }
+            th, td { padding: 10px 5px; }
+            td:first-child { font-size: 18px !important; }
+            .hint-box { padding: 12px; font-size: 14px; }
+            .header-row { flex-direction: column; align-items: center; gap: 8px; }
+            .winner-screen { padding: 20px; }
+            .trophy { font-size: 60px; }
+            #final-points { font-size: 36px !important; }
+            #final-time { font-size: 22px !important; }
+            .dev-controls { flex-direction: column; gap: 5px; }
+            .dev-btn { width: 100% !important; }
         }
         
         @media screen and (max-width: 350px) {
-            .step {
-                width: 35px;
-                height: 35px;
-                font-size: 14px;
-            }
-            
-            .cipher-text {
-                font-size: 18px;
-            }
-            
-            .team-name {
-                font-size: 16px;
-            }
-            
-            .time-display {
-                font-size: 18px;
-            }
-            
+            .step { width: 35px; height: 35px; font-size: 14px; }
+            .cipher-text { font-size: 18px; }
+            .team-name { font-size: 16px; }
+            .time-display { font-size: 18px; }
             [style*="display: flex; justify-content: space-between; margin: 10px 0;"] > div {
-                font-size: 12px !important;
-                min-width: 70px !important;
+                font-size: 12px !important; min-width: 70px !important;
             }
         }
         
         @media screen and (min-width: 481px) and (max-width: 768px) {
-            .card {
-                max-width: 95%;
-            }
-            
-            .help-buttons {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .cipher-text {
-                font-size: 26px;
-            }
+            .card { max-width: 95%; }
+            .help-buttons { grid-template-columns: repeat(2, 1fr); }
+            .cipher-text { font-size: 26px; }
         }
         
         .header-row {
@@ -743,7 +567,7 @@
     <!-- صفحة تسجيل الدخول -->
     <div id="login-screen" class="card">
         <h1>🧭 صيد الكنز الرقمي</h1>
-        <p class="subtitle">مسابقة جماعية لحل الشفرات المقدسة</p>
+        <p class="subtitle">مسابقة جماعية لحل الشفرات </p>
         <div class="paper-icon">📜🔐📜</div>
         <select id="team-select">
             <option value="">-- اختر القديس --</option>
@@ -937,7 +761,7 @@
         <h1 style="font-size: 36px; margin-bottom: 10px;">مبروك يا فريق!</h1>
         <h2 id="winner-team" style="color: #bf360c; font-size: 28px;"></h2>
         <p style="font-size: 22px; font-weight: bold; margin: 20px 0;">
-            🎉 أكملتم المغامرة المقدسة بنجاح! 🎉
+            🎉 أكملتم المغامرة بنجاح! 🎉
         </p>
         <div style="background: rgba(255,255,255,0.3); padding: 20px; border-radius: 15px; margin: 20px 0;">
             <p style="font-size: 18px; margin: 0;">النقاط النهائية:</p>
@@ -988,16 +812,13 @@
             console.log("🧪 DEV_MODE نشط: تم مسح الألعاب السابقة");
         }
 
-        // أنواع الشفرات
+        // أنواع الشفرات (كلها مستوى متوسط)
         const cipherTypes = [
             { name: "ROT13", level: "متوسط", instruction: "حرك كل حرف 13 خطوة (A↔N, B↔O, C↔P...)" },
             { name: "Atbash", level: "متوسط", instruction: "عكس الأبجدية (A↔Z, B↔Y, C↔X...)" },
             { name: "Reverse", level: "متوسط", instruction: "اقرأ الكلمة من الآخر" },
             { name: "ROT5", level: "متوسط", instruction: "حرك الأرقام 5 خطوات (1↔6, 2↔7, 3↔8, 4↔9, 5↔0)" },
-            { name: "مزيج بسيط", level: "متوسط", instruction: "عكس الكلمة ثم ROT13" },
-            { name: "Keyword", level: "خبير", instruction: "استخدم كلمة مفتاحية لإنشاء أبجدية جديدة" },
-            { name: "Polybius", level: "خبير", instruction: "استخدم شبكة 5×5 (رقمين = صف وعمود)" },
-            { name: "Atbash+ROT13", level: "خبير", instruction: "Atbash أولاً ثم ROT13" }
+            { name: "مزيج بسيط", level: "متوسط", instruction: "عكس الكلمة ثم ROT13" }
         ];
 
         // المناطق
@@ -1009,18 +830,18 @@
             pool: { name: "حمام السباحة", class: "area-pool" }
         };
 
-        // بيانات الأماكن والشفرات (10 ألغاز)
+        // بيانات الأماكن والشفرات (10 ألغاز - كلها متوسط)
         const allLocations = [
             { id: "altar", name: "المذبح الرئيسي", icon: "⛪", area: "church", cipher: "NYZNE", solution: "ALTAR", cipherType: 0, difficulty: 3, hint: "مكان مرتفع في الكنيسة حيث يقف الكاهن", firstLetter: "A" },
             { id: "goal", name: "المرمى", icon: "⚽", area: "field", cipher: "ZOO", solution: "GOAL", cipherType: 1, difficulty: 4, hint: "الشبكة التي يسجل فيها الهدف في الملعب", firstLetter: "G" },
             { id: "fountain", name: "النافورة", icon: "⛲", area: "garden", cipher: "RATLA", solution: "FOUNTAIN", cipherType: 2, difficulty: 5, hint: "المكان الذي ينبع منه الماء في الجنينة", firstLetter: "F" },
             { id: "tables", name: "الترابيزات", icon: "🪑", area: "tables", cipher: "12-20-20-17", solution: "TABLES", cipherType: 3, difficulty: 4, hint: "مكان الجلوس والأكل", firstLetter: "T" },
             { id: "pool", name: "المسبح", icon: "🏊", area: "pool", cipher: "NEVZ", solution: "POOL", cipherType: 4, difficulty: 3, hint: "مكان السباحة والماء الأزرق", firstLetter: "P" },
-            { id: "bell", name: "الجرس", icon: "🔔", area: "church", cipher: "HTUJX", solution: "BELL", cipherType: 5, difficulty: 5, hint: "الصوت الذي ينادي للصلاة في الكنيسة", firstLetter: "B" },
-            { id: "crossbar", name: "العارضة", icon: "⚽", area: "field", cipher: "23-15-31-44-15", solution: "CROSSBAR", cipherType: 6, difficulty: 5, hint: "الخط العريض فوق المرمى في الملعب", firstLetter: "C" },
-            { id: "gate", name: "البوابة", icon: "🚪", area: "garden", cipher: "ZMLG", solution: "GATE", cipherType: 7, difficulty: 4, hint: "مدخل الجنينة الرئيسي", firstLetter: "G" },
-            { id: "icons", name: "الأيقونات", icon: "🖼️", area: "church", cipher: "09-03-15-14-19", solution: "ICONS", cipherType: 3, difficulty: 4, hint: "الصور المقدسة على جدران الكنيسة", firstLetter: "I" },
-            { id: "sideline", name: "خط التماس", icon: "⚽", area: "field", cipher: "19-09-04-05-12-09-14-05", solution: "SIDELINE", cipherType: 3, difficulty: 5, hint: "الخط الأبيض على جانب الملعب", firstLetter: "S" }
+            { id: "bell", name: "الجرس", icon: "🔔", area: "church", cipher: "ZOO", solution: "BELL", cipherType: 1, difficulty: 4, hint: "الصوت الذي ينادي للصلاة في الكنيسة", firstLetter: "B" },
+            { id: "crossbar", name: "العارضة", icon: "⚽", area: "field", cipher: "RATLA", solution: "CROSSBAR", cipherType: 2, difficulty: 5, hint: "الخط العريض فوق المرمى في الملعب", firstLetter: "C" },
+            { id: "gate", name: "البوابة", icon: "🚪", area: "garden", cipher: "NYZNE", solution: "GATE", cipherType: 0, difficulty: 4, hint: "مدخل الجنينة الرئيسي", firstLetter: "G" },
+            { id: "icons", name: "الأيقونات", icon: "🖼️", area: "church", cipher: "12-20-20-17", solution: "ICONS", cipherType: 3, difficulty: 4, hint: "الصور المقدسة على جدران الكنيسة", firstLetter: "I" },
+            { id: "sideline", name: "خط التماس", icon: "⚽", area: "field", cipher: "NEVZ", solution: "SIDELINE", cipherType: 4, difficulty: 5, hint: "الخط الأبيض على جانب الملعب", firstLetter: "S" }
         ];
 
         // أكواد QR
