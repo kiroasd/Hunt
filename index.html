@@ -282,7 +282,6 @@
             background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%) !important;
         }
         
-        /* أزرار المساعدة الجديدة */
         .help-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -423,7 +422,6 @@
         .area-tables { background: #fce4ec; color: #c2185b; }
         .area-pool { background: #e0f7fa; color: #00838f; }
         
-        /* صندوق الوقت */
         .time-box {
             background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
             padding: 15px;
@@ -443,7 +441,6 @@
             margin-top: 5px;
         }
         
-        /* تنسيق لوحة المتصدرين */
         .leaderboard-section {
             margin-top: 30px;
             padding: 20px;
@@ -458,7 +455,6 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
-        /* إضافة جديدة: رسالة خطأ لوحة المتصدرين */
         .leaderboard-error {
             background: #ffebee;
             color: #c62828;
@@ -674,12 +670,12 @@
     </audio>
 
     <script>
-        // Firebase Configuration
+        // ✅ Firebase Configuration (مصححة)
         const firebaseConfig = {
             apiKey: "AIzaSyACJ9zKs8EiVCNN8CgOtCNknV1znLNjlY8",
             authDomain: "spiritualtreasurehunt-684b9.firebaseapp.com",
-            projectId: "spiritualtreasurehunt-684b9", 
-            storageBucket: "spiritualtreasurehunt-684b9.firebasestorage.app",
+            projectId: "spiritualtreasurehunt-684b9",
+            storageBucket: "spiritualtreasurehunt-684b9.appspot.com", // تم التعديل
             messagingSenderId: "266754020181",
             appId: "1:266754020181:web:67750b2f5a670a601195dc"
         };
@@ -855,7 +851,6 @@
 
         // ==================== نظام حفظ الوقت في LocalStorage ====================
         
-        // حفظ حالة اللعبة
         function saveGameState() {
             if (!currentTeam || currentMission > 10) return;
             
@@ -872,7 +867,6 @@
             localStorage.setItem('huntGameState', JSON.stringify(state));
         }
 
-        // استرجاع حالة اللعبة
         function loadGameState() {
             const saved = localStorage.getItem('huntGameState');
             if (saved) {
@@ -881,17 +875,14 @@
             return null;
         }
 
-        // مسح الحالة المحفوظة
         function clearGameState() {
             localStorage.removeItem('huntGameState');
         }
 
-        // عند تحميل الصفحة - استرجاع الحالة إذا وجدت
         window.addEventListener('load', function() {
             const savedState = loadGameState();
             if (savedState && savedState.team && savedState.mission <= 10) {
                 const timeDiff = new Date() - new Date(savedState.timestamp);
-                // إذا كان الوقت منذ آخر حفظ أقل من 24 ساعة
                 if (timeDiff < 24 * 60 * 60 * 1000) {
                     const restore = confirm(`يوجد لعبة سابقة لفريق ${savedState.team.replace(/_/g, ' ')} متوقفة عند اللغز ${savedState.mission}\nهل تريد استكمال اللعبة؟`);
                     if (restore) {
@@ -905,7 +896,6 @@
             }
         });
 
-        // استرجاع اللعبة المحفوظة
         async function restoreGame(savedState) {
             currentTeam = savedState.team;
             currentMission = savedState.mission;
@@ -937,7 +927,6 @@
             loadLeaderboard();
         }
 
-        // حفظ عند الخروج
         window.addEventListener('beforeunload', function(e) {
             if (currentTeam && currentMission <= 10) {
                 saveGameState();
@@ -951,7 +940,6 @@
         
         async function checkFirebaseConnection() {
             try {
-                // محاولة قراءة من قاعدة البيانات
                 const testDoc = await db.collection('teams').doc('_connection_test_').get();
                 console.log('✅ Firebase connection: OK');
                 firebaseConnected = true;
@@ -977,7 +965,6 @@
                     errorMsg += 'تأكد من:\n1. اتصال الإنترنت\n2. Firebase Config صحيح';
                 }
                 
-                // عرض رسالة في لوحة المتصدرين
                 const statusDiv = document.getElementById('leaderboard-status');
                 if (statusDiv) {
                     statusDiv.className = 'leaderboard-error';
@@ -990,7 +977,6 @@
 
         // ==================== باقي الدوال ====================
 
-        // توليد ترتيب عشوائي ثابت للفريق
         function shuffleForTeam(teamName) {
             let shuffled = [...allLocations];
             let seed = teamName.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
@@ -1001,7 +987,6 @@
             return shuffled;
         }
 
-        // بدء اللعبة
         async function startApp() {
             currentTeam = document.getElementById('team-select').value;
             if (!currentTeam) {
@@ -1017,10 +1002,8 @@
             document.getElementById('game-screen').classList.remove('hidden');
             document.getElementById('team-display').innerText = "فريق: " + currentTeam.replace(/_/g, ' ');
 
-            // بدء المؤقت
             startTimer();
 
-            // فحص الاتصال بـ Firebase أولاً
             await checkFirebaseConnection();
             
             await loadProgress();
@@ -1028,7 +1011,6 @@
             showCipherPhase();
         }
 
-        // المؤقت
         function startTimer() {
             if (timerInterval) clearInterval(timerInterval);
             timerInterval = setInterval(() => {
@@ -1041,13 +1023,11 @@
             }, 1000);
         }
 
-        // تحديث آخر نشاط
         function updateLastAction(action) {
             lastActionTime = new Date();
             const timeStr = lastActionTime.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             document.getElementById('last-action').innerText = `آخر نشاط: ${action} (${timeStr})`;
             
-            // حفظ في Firebase
             if (firebaseConnected) {
                 db.collection('teams').doc(currentTeam).update({
                     lastAction: action,
@@ -1055,17 +1035,14 @@
                 }).catch(() => {});
             }
             
-            // حفظ في LocalStorage
             saveGameState();
         }
 
-        // تحميل التقدم
         async function loadProgress() {
             try {
                 const doc = await db.collection('teams').doc(currentTeam).get();
                 if (doc.exists) {
                     const data = doc.data();
-                    // استخدم القيم المحفوظة أو الافتراضية
                     currentMission = data.currentMission || 1;
                     totalPoints = data.totalPoints || 0;
                     hintsUsed = data.hintsUsed || 0;
@@ -1088,7 +1065,6 @@
             }
         }
 
-        // عرض مرحلة الشفرة
         function showCipherPhase() {
             isVerified = false;
             document.getElementById('cipher-phase').classList.remove('hidden');
@@ -1100,7 +1076,6 @@
             document.getElementById('step-1').classList.remove('completed');
             document.getElementById('step-2').classList.remove('completed');
             
-            // إعادة تعيين صندوق التحقق
             document.getElementById('solution-input').value = '';
             document.getElementById('solution-input').disabled = false;
             document.getElementById('verify-btn').disabled = false;
@@ -1109,10 +1084,8 @@
             document.getElementById('verify-message').className = 'verify-message';
             document.getElementById('verify-message').innerText = '';
             
-            // إخفاء المكان
             document.getElementById('location-reveal').classList.add('hidden');
             
-            // إخفاء صناديق التلميح
             document.getElementById('hint-box-1').style.display = 'none';
             document.getElementById('hint-box-2').style.display = 'none';
             document.getElementById('hint-box-3').style.display = 'none';
@@ -1124,7 +1097,6 @@
             updateUI();
         }
 
-        // نظام المساعدة الجديد
         async function showHelp(level) {
             if (currentMission > 10) return;
             
@@ -1134,25 +1106,24 @@
             let boxId = '';
             
             switch(level) {
-                case 1: // تلميح المكان
+                case 1:
                     pointsDeduction = 2;
                     hintText = `📍 المنطقة: <strong>${areas[currentLoc.area].name}</strong><br>🔍 ${currentLoc.hint}`;
                     boxId = 'hint-box-1';
                     break;
                     
-                case 2: // تلميح الشفرة
+                case 2:
                     pointsDeduction = 3;
                     const cipherName = cipherTypes[currentLoc.cipherType].name;
                     hintText = `🔑 نوع الشفرة: <strong>${cipherName}</strong><br>📝 أول حرف من الحل: <strong>${currentLoc.firstLetter}</strong><br>💡 عدد الحروف: ${currentLoc.solution.length}`;
                     boxId = 'hint-box-2';
                     break;
                     
-                case 3: // الحل الكامل
+                case 3:
                     pointsDeduction = 5;
                     hintText = `🚨 <strong>الحل الكامل:</strong> ${currentLoc.solution}<br>🏃 <strong>المكان:</strong> ${currentLoc.name}<br><br>⚠️ تم خصم 5 نقاط!`;
                     boxId = 'hint-box-3';
                     
-                    // فتح المكان تلقائياً
                     isVerified = true;
                     document.getElementById('location-reveal').classList.remove('hidden');
                     document.getElementById('location-icon').innerText = currentLoc.icon;
@@ -1162,21 +1133,17 @@
                     badge.innerText = areaInfo.name;
                     badge.className = 'area-badge ' + areaInfo.class;
                     
-                    // تعطيل الإدخال
                     document.getElementById('solution-input').disabled = true;
                     document.getElementById('verify-btn').disabled = true;
                     break;
             }
             
-            // خصم النقاط
             totalPoints -= pointsDeduction;
             hintsUsed++;
             
-            // عرض التلميح
             document.getElementById('hint-text-' + level).innerHTML = hintText;
             document.getElementById(boxId).style.display = 'block';
             
-            // حفظ في Firebase
             if (firebaseConnected) {
                 try {
                     await db.collection('teams').doc(currentTeam).update({
@@ -1193,11 +1160,9 @@
             updateLastAction(`مساعدة مستوى ${level} (-${pointsDeduction} نقطة)`);
             saveGameState();
             
-            // تمرير للتلميح
             document.getElementById(boxId).scrollIntoView({ behavior: 'smooth' });
         }
 
-        // التحقق من الحل
         async function verifySolution() {
             const input = document.getElementById('solution-input').value.trim().toUpperCase();
             const currentLoc = teamMissions[currentMission - 1];
@@ -1206,19 +1171,16 @@
             const msgBox = document.getElementById('verify-message');
             
             if (input === correctSolution) {
-                // ✅ الحل صحيح
                 isVerified = true;
                 
                 msgBox.className = 'verify-message success';
                 msgBox.innerHTML = '🎉 أحسنت! الحل صحيح!<br>المكان الآن مفتوح لك';
                 
-                // تعطيل الإدخال وزر التحقق
                 document.getElementById('solution-input').disabled = true;
                 document.getElementById('verify-btn').disabled = true;
                 document.getElementById('verify-btn').innerText = '✅ تم التحقق';
                 document.getElementById('verify-btn').classList.add('success');
                 
-                // إظهار المكان
                 document.getElementById('location-reveal').classList.remove('hidden');
                 document.getElementById('location-icon').innerText = currentLoc.icon;
                 document.getElementById('location-name').innerText = currentLoc.name;
@@ -1228,21 +1190,17 @@
                 badge.innerText = areaInfo.name;
                 badge.className = 'area-badge ' + areaInfo.class;
                 
-                // تحديث الخطوات
                 document.getElementById('step-1').classList.remove('active');
                 document.getElementById('step-1').classList.add('completed');
                 document.getElementById('step-2').classList.add('active');
                 
-                // صوت نجاح
                 const successSound = document.getElementById('success-sound');
                 successSound.volume = 0.3;
                 successSound.play().catch(() => {});
                 
-                // تحديث الوقت
                 updateLastAction('فك الشفرة');
                 saveGameState();
                 
-                // حفظ وقت فك الشفرة
                 if (firebaseConnected) {
                     const solveTime = new Date();
                     await db.collection('teams').doc(currentTeam).collection('missions').doc(currentMission.toString()).set({
@@ -1251,11 +1209,9 @@
                     }).catch(() => {});
                 }
                 
-                // تمرير للمكان
                 document.getElementById('location-reveal').scrollIntoView({ behavior: 'smooth' });
                 
             } else {
-                // ❌ الحل غلط
                 msgBox.className = 'verify-message error';
                 
                 let hint = '';
@@ -1267,13 +1223,11 @@
                 
                 msgBox.innerHTML = `❌ الحل غير صحيح!${hint}`;
                 
-                // إفراغ الحقل للمحاولة مرة أخرى
                 document.getElementById('solution-input').value = '';
                 document.getElementById('solution-input').focus();
             }
         }
 
-        // السماح بالضغط على Enter للتحقق
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('solution-input').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
@@ -1282,7 +1236,6 @@
             });
         });
 
-        // بدء مرحلة المسح
         function startScanPhase() {
             if (!isVerified) {
                 alert('⚠️ يجب فك الشفرة أولاً!');
@@ -1305,12 +1258,10 @@
             startScanner();
         }
 
-        // رجوع للشفرة
         function backToCipher() {
             showCipherPhase();
         }
 
-        // تحديث الواجهة
         function updateUI() {
             const progress = ((currentMission - 1) / 10) * 100;
             document.getElementById('progress-bar').style.width = progress + '%';
@@ -1325,17 +1276,14 @@
             document.getElementById('mission-number').innerText = currentMission;
             document.getElementById('cipher-display').innerText = currentLoc.cipher;
             
-            // تحديث نوع الشفرة
             const cipherInfo = cipherTypes[currentLoc.cipherType];
             document.getElementById('cipher-type').innerText = cipherInfo.name;
             document.getElementById('cipher-instruction').innerHTML = cipherInfo.instruction;
             
-            // تحديث النجوم
             const stars = '⭐'.repeat(currentLoc.difficulty);
             document.getElementById('difficulty-stars').innerText = stars;
         }
 
-        // عرض شاشة الفوز
         async function showWinnerScreen() {
             clearInterval(timerInterval);
             
@@ -1352,7 +1300,6 @@
             document.getElementById('final-points').innerText = totalPoints;
             document.getElementById('final-time').innerText = timeString;
 
-            // حفظ النتيجة النهائية
             if (firebaseConnected) {
                 try {
                     await db.collection('teams').doc(currentTeam).update({
@@ -1375,7 +1322,6 @@
             clearGameState();
         }
 
-        // تأثير الكونفيتي
         function createConfetti() {
             const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722'];
             for (let i = 0; i < 50; i++) {
@@ -1391,9 +1337,8 @@
             }
         }
 
-        // ==================== لوحة المتصدرين المعدلة ====================
+        // ==================== لوحة المتصدرين المعدلة (تم إصلاح مشكلة الفهرس) ====================
         function loadLeaderboard() {
-            // إلغاء الاشتراك السابق إذا وجد
             if (leaderboardUnsubscribe) {
                 leaderboardUnsubscribe();
             }
@@ -1401,10 +1346,9 @@
             const statusDiv = document.getElementById('leaderboard-status');
             const tableDiv = document.getElementById('leaderboard-table');
             
-            // التحقق من الاتصال أولاً
             if (!firebaseConnected) {
                 statusDiv.className = 'leaderboard-error';
-                statusDiv.innerHTML = '⚠️ غير متصل بقاعدة البيانات<br><small>تأكد من إعدادات Firebase</small>';
+                statusDiv.innerHTML = '⚠️ غير متصل بقاعدة البيانات';
                 tableDiv.style.display = 'none';
                 return;
             }
@@ -1413,10 +1357,10 @@
             statusDiv.innerText = 'جاري تحميل البيانات...';
             tableDiv.style.display = 'none';
             
-            // الاشتراك في تحديثات الفرق
+            // استعلام مبسط لتجنب مشكلة الفهرس
             leaderboardUnsubscribe = db.collection('teams')
-                .orderBy('completed', 'desc')
                 .orderBy('totalPoints', 'desc')
+                .orderBy('__name__', 'desc')
                 .onSnapshot(snap => {
                     const tbody = document.getElementById('leaderboard-body');
                     if (!tbody) return;
@@ -1425,42 +1369,24 @@
                     let rank = 1;
                     
                     if (snap.empty) {
-                        statusDiv.className = 'leaderboard-loading';
-                        statusDiv.innerText = 'لا توجد بيانات حالياً';
-                        tableDiv.style.display = 'none';
+                        statusDiv.innerText = 'لا توجد بيانات';
                         return;
                     }
                     
                     snap.forEach(doc => {
-                        // تخطي مستندات الاختبار
                         if (doc.id.startsWith('_')) return;
                         
                         const data = doc.data();
-                        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+                        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
                         const teamName = doc.id.replace(/_/g, ' ');
                         const currentMissionNum = data.currentMission > 10 ? '✅' : (data.currentMission || 1);
-                        
-                        // حساب الوقت
-                        let timeDisplay = '--:--:--';
-                        if (data.startTime && data.endTime) {
-                            const totalSeconds = data.totalTimeSeconds || Math.floor((data.endTime.toDate() - data.startTime.toDate()) / 1000);
-                            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-                            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-                            const s = (totalSeconds % 60).toString().padStart(2, '0');
-                            timeDisplay = `${h}:${m}:${s}`;
-                        } else if (data.lastActionTime) {
-                            timeDisplay = '⏳ جاري...';
-                        }
-                        
-                        const points = data.totalPoints || 0;
-                        const pointsColor = points < 0 ? '#f44336' : '#4caf50';
                         
                         html += `<tr>
                             <td style="font-size: 20px;">${medal}</td>
                             <td><strong>${teamName}</strong></td>
                             <td>${currentMissionNum}/10</td>
-                            <td style="color: ${pointsColor}; font-weight: bold;">${points}</td>
-                            <td style="font-family: monospace; font-size: 14px;">${timeDisplay}</td>
+                            <td style="color: ${(data.totalPoints||0) < 0 ? '#f44336' : '#4caf50'}; font-weight: bold;">${data.totalPoints || 0}</td>
+                            <td>--:--</td>
                         </tr>`;
                         rank++;
                     });
@@ -1471,24 +1397,17 @@
                     
                 }, error => {
                     console.error("Leaderboard error:", error);
-                    const tbody = document.getElementById('leaderboard-body');
                     
-                    let errorMsg = '⚠️ خطأ في تحميل البيانات';
-                    if (error.code === 'permission-denied') {
-                        errorMsg = '⚠️ خطأ في الصلاحيات<br><small>Security Rules مغلقة - افتح Firebase Console</small>';
-                    } else if (error.code === 'unauthenticated') {
-                        errorMsg = '⚠️ يجب تسجيل الدخول';
+                    // عرض رسالة مفيدة للمستخدم
+                    if (error.code === 'failed-precondition' && error.message.includes('index')) {
+                        statusDiv.className = 'leaderboard-error';
+                        statusDiv.innerHTML = '⚠️ الفهرس غير موجود<br><small>اتبع الرابط لإنشاء الفهرس:</small><br>' +
+                            '<a href="https://console.firebase.google.com/v1/r/project/spiritualtreasurehunt-684b9/firestore/indexes?create_composite=Cllwcm9qZWN0cy9zcGlyaXR1YWx0cmVhc3VyZWh1bnQtNjg0YjkvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL3RlYW1zL2luZGV4ZXMvXxABGg0KCWNvbXBsZXRlZBACGg8KC3RvdGFsUG9pbnRzEAIaDAoIX19uYW1lX18QAg" target="_blank" style="color: #ffd700;">🔗 اضغط هنا لإنشاء الفهرس</a>';
+                    } else {
+                        statusDiv.className = 'leaderboard-error';
+                        statusDiv.innerHTML = '⚠️ خطأ في التحميل: ' + error.message;
                     }
-                    
-                    statusDiv.className = 'leaderboard-error';
-                    statusDiv.innerHTML = errorMsg;
                     tableDiv.style.display = 'none';
-                    
-                    // محاولة إعادة الاتصال بعد 5 ثواني
-                    setTimeout(() => {
-                        console.log("Retrying leaderboard connection...");
-                        loadLeaderboard();
-                    }, 5000);
                 });
         }
 
@@ -1514,14 +1433,12 @@
             });
         }
 
-        // إعادة تشغيل الماسح
         function restartScanner() {
             document.getElementById('scan-feedback').innerText = "🔄 جاري إعادة تشغيل الكاميرا...";
             document.getElementById('scan-feedback').style.color = "#666";
             startScanner();
         }
 
-        // معالجة المسح
         async function handleScan(text) {
             const scanned = text.trim().toUpperCase();
             const targetLocationId = teamMissions[currentMission - 1].id;
@@ -1538,7 +1455,6 @@
                 successSound.volume = 0.3;
                 successSound.play().catch(() => {});
 
-                // حفظ وقت إكمال اللغز
                 if (firebaseConnected) {
                     const scanTime = new Date();
                     await db.collection('teams').doc(currentTeam).collection('missions').doc(currentMission.toString()).update({
@@ -1577,7 +1493,6 @@
             }
         }
 
-        // معالجة النجاح
         async function handleSuccess() {
             currentMission++;
             totalPoints += 10;
@@ -1607,25 +1522,3 @@
     </script>
 </body>
 </html>
-<script>
-// اختبار اتصال Firebase
-setTimeout(() => {
-    console.log("🔍 جاري اختبار اتصال Firebase...");
-    try {
-        const testRef = db.collection('teams').doc('test-connection');
-        testRef.set({
-            test: true,
-            timestamp: new Date().toISOString()
-        }).then(() => {
-            console.log("✅ ✅ ✅ Firebase يعمل بشكل ممتاز!");
-            alert("✅ Firebase متصل بنجاح!");
-        }).catch((error) => {
-            console.error("❌ خطأ في الكتابة:", error);
-            alert("❌ خطأ في الكتابة: " + error.message);
-        });
-    } catch (e) {
-        console.error("❌ خطأ عام:", e);
-        alert("❌ خطأ عام: " + e.message);
-    }
-}, 2000);
-</script>
