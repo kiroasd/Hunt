@@ -112,10 +112,15 @@
             display: inline-block;
             margin-bottom: 20px;
         }
+        .difficulty {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 20px;
+        }
         .cipher-text {
             font-family: 'Courier New', monospace;
-            font-size: 36px;
-            letter-spacing: 5px;
+            font-size: 32px;
+            letter-spacing: 3px;
             font-weight: bold;
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
             direction: ltr;
@@ -131,22 +136,6 @@
             font-size: 16px;
             margin-top: 15px;
             line-height: 1.6;
-        }
-        .cipher-level {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin: 15px 0;
-        }
-        .level-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #455a64;
-        }
-        .level-dot.active {
-            background: #ffd700;
-            box-shadow: 0 0 10px #ffd700;
         }
         
         .verify-box {
@@ -402,6 +391,19 @@
             font-size: 40px;
             margin: 10px;
         }
+        .area-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .area-church { background: #e8eaf6; color: #3949ab; }
+        .area-field { background: #e8f5e9; color: #2e7d32; }
+        .area-garden { background: #fff3e0; color: #ef6c00; }
+        .area-tables { background: #fce4ec; color: #c2185b; }
+        .area-pool { background: #e0f7fa; color: #00838f; }
     </style>
 </head>
 <body id="main-body">
@@ -411,22 +413,18 @@
         <h1>🧭 صيد الكنز الرقمي</h1>
         <p class="subtitle">مسابقة جماعية لحل الشفرات المقدسة</p>
         <div class="paper-icon">📜🔐📜</div>
-        <p style="font-size: 16px; color: #555; margin-bottom: 20px;">
-            لديك <strong>ورقة مفاتيح سرية</strong>!<br>
-            استخدمها لفك الشفرات وإيجاد الأماكن المخفية
-        </p>
         <select id="team-select">
             <option value="">-- اختر القديس --</option>
-            <option value="مارمينا">🐪 القديس مارمينا</option>
-            <option value="مارجرجس">🐎 القديس مارجرجس</option>
-            <option value="مارمرقس">🦁 القديس مارمرقس</option>
-            <option value="العذراء_مريم">👑 العذراء القديسة مريم</option>
-            <option value="الشهيدة_دميانة">⚜️ الشهيدة دميانة</option>
-            <option value="الأنبا_أنطونيوس">🌟 الأنبا أنطونيوس</option>
+            <option value="مارمينا"> القديس مارمينا</option>
+            <option value="مارجرجس"> القديس مارجرجس</option>
+            <option value="مارمرقس"> القديس مارمرقس</option>
+            <option value="العذراء_مريم">العذراء القديسة مريم</option>
+            <option value="الشهيدة_دميانة"> الشهيدة دميانة</option>
+            <option value="الأنبا_أنطونيوس"> الأنبا أنطونيوس</option>
         </select>
         <button onclick="startApp()">🚀 بدء المغامرة</button>
         <p style="font-size: 12px; color: #999; margin-top: 20px;">
-            💡 تلميح: اطبع ورقة المفاتيح وخذها معك!
+            💡 كل لغز في مكان مختلف! اقرأ ورقة المفاتيح جيداً
         </p>
     </div>
 
@@ -452,22 +450,19 @@
                 <strong style="color: #e65100; font-size: 20px;">
                     🔐 الشفرة رقم <span id="mission-number">1</span> من 10
                 </strong>
+                <span class="difficulty" id="difficulty-stars">⭐⭐⭐</span>
             </div>
 
             <div class="cipher-container">
-                <div class="cipher-type" id="cipher-type">شفرة قيسار</div>
-                <div class="cipher-level" id="cipher-level">
-                    <div class="level-dot active"></div>
-                    <div class="level-dot"></div>
-                    <div class="level-dot"></div>
-                </div>
+                <div class="cipher-type" id="cipher-type">قيسار (+5)</div>
                 
                 <div class="cipher-text" id="cipher-display">?????</div>
                 
                 <div class="cipher-instruction" id="cipher-instruction">
-                    استخدم <strong>المفتاح الأول</strong> في ورقتك<br>
-                    حرك كل حرف 3 خطوات للخلف في الأبجدية
+                    حرك كل حرف 5 خطوات للخلف في الأبجدية
                 </div>
+                
+                <div class="area-badge" id="area-badge">الكنيسة</div>
             </div>
 
             <!-- صندوق التحقق من الحل -->
@@ -479,7 +474,7 @@
                     type="text" 
                     id="solution-input" 
                     class="verify-input" 
-                    placeholder="ALTAR"
+                    placeholder="ضع حلك هنا "
                     autocomplete="off"
                     spellcheck="false"
                 >
@@ -505,6 +500,7 @@
                 <div class="location-icon" id="location-icon">⛪</div>
                 <div>🎯 اذهب إلى:</div>
                 <div id="location-name" style="font-size: 32px; margin-top: 15px; color: #1b5e20;"></div>
+                <div class="area-badge" id="reveal-area-badge" style="margin-top: 15px;">الكنيسة</div>
                 <button onclick="startScanPhase()" style="margin-top: 20px; background: linear-gradient(135deg, #ff5722 0%, #d84315 100%); font-size: 20px;">
                     📷 وجدت المكان! افتح الماسح
                 </button>
@@ -600,117 +596,145 @@
 
         // أنواع الشفرات
         const cipherTypes = [
-            { name: "قيسار", level: 1, instruction: "حرك كل حرف 3 خطوات للخلف (A→X, B→Y, C→Z, D→A...)" },
-            { name: "عكسية", level: 2, instruction: "اقلب الكلمة بالكامل (أول حرف يبقى آخر حرف)" },
-            { name: "صليبية", level: 3, instruction: "اكتب الحروف عمودياً (حرف تحت حرف) واقرأ من فوق لتحت" }
+            { name: "قيسار (+5)", instruction: "حرك كل حرف 5 خطوات للخلف (A→V, B→W, C→X, D→Y, E→Z, F→A...)" },
+            { name: "أرقام مركبة", instruction: "كل رقمين = حرف: 01=A, 02=B, ..., 26=Z" }
         ];
 
-        // بيانات الأماكن والشفرات - مصححة بالكامل
+        // المناطق
+        const areas = {
+            church: { name: "الكنيسة", class: "area-church" },
+            field: { name: "الملعب", class: "area-field" },
+            garden: { name: "الجنينة", class: "area-garden" },
+            tables: { name: "الترابيزات", class: "area-tables" },
+            pool: { name: "حمام السباحة", class: "area-pool" }
+        };
+
+        // بيانات الأماكن والشفرات - جديدة كلها
         const allLocations = [
             { 
                 id: "altar", 
                 name: "المذبح الرئيسي", 
                 icon: "⛪",
-                cipher: "DOWDU", // ALTAR: A→D, L→O, T→W, A→D, R→U
+                area: "church",
+                cipher: "FQYGFW", // ALTAR: A+5=F, L+5=Q, T+5=Y, A+5=F, R+5=W
                 solution: "ALTAR",
                 cipherType: 0,
-                hint: "المكان المرتفع حيث يقف الكاهن ويرفع القداس الإلهي" 
+                difficulty: 3,
+                hint: "المكان المرتفع في الكنيسة حيث يقف الكاهن" 
+            },
+            { 
+                id: "goal", 
+                name: "المرمى", 
+                icon: "⚽",
+                area: "field",
+                cipher: "07-15-01-12", // G=07, O=15, A=01, L=12
+                solution: "GOAL",
+                cipherType: 1,
+                difficulty: 4,
+                hint: "الشبكة التي يسجل فيها الهدف في الملعب" 
+            },
+            { 
+                id: "fountain", 
+                name: "النافورة", 
+                icon: "⛲",
+                area: "garden",
+                cipher: "06-15-21-14-20-01-09-14", // F=06, O=15, U=21, N=14, T=20, A=01, I=09, N=14
+                solution: "FOUNTAIN",
+                cipherType: 1,
+                difficulty: 5,
+                hint: "المكان الذي ينبع منه الماء في الجنينة" 
+            },
+            { 
+                id: "tables", 
+                name: "الترابيزات", 
+                icon: "🪑",
+                area: "tables",
+                cipher: "20-01-02-12-05-19", // T=20, A=01, B=02, L=12, E=05, S=19
+                solution: "TABLES",
+                cipherType: 1,
+                difficulty: 4,
+                hint: "مكان الجلوس والأكل" 
+            },
+            { 
+                id: "pool", 
+                name: "المسبح", 
+                icon: "🏊",
+                area: "pool",
+                cipher: "16-15-15-12", // P=16, O=15, O=15, L=12
+                solution: "POOL",
+                cipherType: 1,
+                difficulty: 3,
+                hint: "مكان السباحة والماء الأزرق" 
             },
             { 
                 id: "bell", 
-                name: "المنارة العالية", 
+                name: "الجرس", 
                 icon: "🔔",
-                cipher: "EHOOR", // BELL: B→E, E→H, L→O, L→O
+                area: "church",
+                cipher: "02-05-12-12", // B=02, E=05, L=12, L=12
                 solution: "BELL",
-                cipherType: 0,
-                hint: "أعلى مكان في الكنيسة، صوته ينادي المؤمنين للصلاة" 
-            },
-            { 
-                id: "school", 
-                name: "مدرسة الأحد", 
-                icon: "📚",
-                cipher: "LOOHCS", // SCHOOL معكوس
-                solution: "SCHOOL",
                 cipherType: 1,
-                hint: "المكان الذي يتعلم فيه الأطفال قصص القديسين" 
+                difficulty: 3,
+                hint: "الصوت الذي ينادي للصلاة في الكنيسة" 
             },
             { 
-                id: "bread", 
-                name: "القربان المقدس", 
-                icon: "🍞",
-                cipher: "DAERB", // BREAD معكوس
-                solution: "BREAD",
+                id: "crossbar", 
+                name: "العارضة", 
+                icon: "⚽",
+                area: "field",
+                cipher: "03-18-15-19-19-02-01-18", // C=03, R=18, O=15, S=19, S=19, B=02, A=01, R=18
+                solution: "CROSSBAR",
                 cipherType: 1,
-                hint: "الخبز المقدس في التابوت الذهبي" 
+                difficulty: 5,
+                hint: "الخط العريض فوق المرمى في الملعب" 
             },
             { 
-                id: "noah", 
-                name: "سفينة نوح", 
-                icon: "🚢",
-                cipher: "HAON", // NOAH معكوس
-                solution: "NOAH",
+                id: "gate", 
+                name: "البوابة", 
+                icon: "🚪",
+                area: "garden",
+                cipher: "07-01-20-05", // G=07, A=01, T=20, E=05
+                solution: "GATE",
                 cipherType: 1,
-                hint: "مجسم السفينة التي أنقذت العالم من الطوفان" 
+                difficulty: 3,
+                hint: "مدخل الجنينة الرئيسي" 
             },
             { 
-                id: "stone", 
-                name: "القبر الفارغ", 
-                icon: "🪨",
-                cipher: "S-T-O-N-E", // STONE صليبية
-                solution: "STONE",
-                cipherType: 2,
-                hint: "الحجر الذي دحرجه الملاك يوم القيامة المجيدة" 
-            },
-            { 
-                id: "eden", 
-                name: "شجرة الحياة", 
-                icon: "🌳",
-                cipher: "E-D-E-N", // EDEN صليبية
-                solution: "EDEN",
-                cipherType: 2,
-                hint: "الشجرة التي في جنة عدن بجانب المذبح" 
-            },
-            { 
-                id: "water", 
-                name: "صخرة موسى", 
-                icon: "💧",
-                cipher: "RETAW", // WATER معكوس
-                solution: "WATER",
+                id: "icons", 
+                name: "الأيقونات", 
+                icon: "🖼️",
+                area: "church",
+                cipher: "09-03-15-14-19", // I=09, C=03, O=15, N=14, S=19
+                solution: "ICONS",
                 cipherType: 1,
-                hint: "الصخرة التي انبجست منها المياه في البرية" 
+                difficulty: 4,
+                hint: "الصور المقدسة على جدران الكنيسة" 
             },
             { 
-                id: "bethlehem", 
-                name: "المزود المقدس", 
-                icon: "👶",
-                cipher: "MEHELHTEB", // BETHLEHEM معكوس
-                solution: "BETHLEHEM",
+                id: "sideline", 
+                name: "خط التماس", 
+                icon: "⚽",
+                area: "field",
+                cipher: "19-09-04-05-12-09-14-05", // S=19, I=09, D=04, E=05, L=12, I=09, N=14, E=05
+                solution: "SIDELINE",
                 cipherType: 1,
-                hint: "مكان ميلاد السيد المسيح في بيت لحم" 
-            },
-            { 
-                id: "cross", 
-                name: "الصليب الذهبي", 
-                icon: "✝️",
-                cipher: "S-S-O-R-C", // CROSS صليبية (مقلوبة)
-                solution: "CROSS",
-                cipherType: 2,
-                hint: "أعلى صليب في القاعة الرئيسية للكنيسة" 
+                difficulty: 5,
+                hint: "الخط الأبيض على جانب الملعب" 
             }
         ];
 
         // أكواد QR الفعلية
         const qrCodes = {
             "LOC-ALTAR": "altar",
+            "LOC-GOAL": "goal",
+            "LOC-FOUNTAIN": "fountain",
+            "LOC-TABLES": "tables",
+            "LOC-POOL": "pool",
             "LOC-BELL": "bell",
-            "LOC-SCHOOL": "school",
-            "LOC-BREAD": "bread",
-            "LOC-NOAH": "noah",
-            "LOC-STONE": "stone",
-            "LOC-EDEN": "eden",
-            "LOC-WATER": "water",
-            "LOC-BETHLEHEM": "bethlehem",
-            "LOC-CROSS": "cross"
+            "LOC-CROSSBAR": "crossbar",
+            "LOC-GATE": "gate",
+            "LOC-ICONS": "icons",
+            "LOC-SIDELINE": "sideline"
         };
 
         let currentTeam = "";
@@ -833,6 +857,12 @@
                 document.getElementById('location-icon').innerText = currentLoc.icon;
                 document.getElementById('location-name').innerText = currentLoc.name;
                 
+                // تحديث badge المنطقة
+                const areaInfo = areas[currentLoc.area];
+                const badge = document.getElementById('reveal-area-badge');
+                badge.innerText = areaInfo.name;
+                badge.className = 'area-badge ' + areaInfo.class;
+                
                 // تحديث الخطوات
                 document.getElementById('step-1').classList.remove('active');
                 document.getElementById('step-1').classList.add('completed');
@@ -919,16 +949,18 @@
             
             // تحديث نوع الشفرة
             const cipherInfo = cipherTypes[currentLoc.cipherType];
-            document.getElementById('cipher-type').innerText = "شفرة " + cipherInfo.name;
-            document.getElementById('cipher-instruction').innerHTML = 
-                "استخدم <strong>المفتاح " + (currentLoc.cipherType + 1) + "</strong> في ورقتك<br>" +
-                cipherInfo.instruction;
+            document.getElementById('cipher-type').innerText = cipherInfo.name;
+            document.getElementById('cipher-instruction').innerHTML = cipherInfo.instruction;
             
-            // تحديث مستوى الصعوبة
-            const dots = document.querySelectorAll('.level-dot');
-            dots.forEach((dot, idx) => {
-                dot.classList.toggle('active', idx <= currentLoc.cipherType);
-            });
+            // تحديث النجوم
+            const stars = '⭐'.repeat(currentLoc.difficulty);
+            document.getElementById('difficulty-stars').innerText = stars;
+            
+            // تحديث badge المنطقة
+            const areaInfo = areas[currentLoc.area];
+            const badge = document.getElementById('area-badge');
+            badge.innerText = areaInfo.name;
+            badge.className = 'area-badge ' + areaInfo.class;
         }
 
         // عرض شاشة الفوز
