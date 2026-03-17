@@ -1607,3 +1607,25 @@
     </script>
 </body>
 </html>
+<script>
+// اختبار اتصال Firebase
+setTimeout(() => {
+    console.log("🔍 جاري اختبار اتصال Firebase...");
+    try {
+        const testRef = db.collection('teams').doc('test-connection');
+        testRef.set({
+            test: true,
+            timestamp: new Date().toISOString()
+        }).then(() => {
+            console.log("✅ ✅ ✅ Firebase يعمل بشكل ممتاز!");
+            alert("✅ Firebase متصل بنجاح!");
+        }).catch((error) => {
+            console.error("❌ خطأ في الكتابة:", error);
+            alert("❌ خطأ في الكتابة: " + error.message);
+        });
+    } catch (e) {
+        console.error("❌ خطأ عام:", e);
+        alert("❌ خطأ عام: " + e.message);
+    }
+}, 2000);
+</script>
